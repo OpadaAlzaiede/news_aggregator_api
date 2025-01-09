@@ -1,0 +1,101 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "News aggregator API documentation",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/register": {
+            "post": {
+                "summary": "user registration",
+                "operationId": "285fdd9a47395c6423af27fbc07fc03d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "email"
+                                    },
+                                    "password": {
+                                        "type": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "password"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "john doe",
+                                    "email": "john@doe.com",
+                                    "password": "re412##AB",
+                                    "password_confirmation": "re412##AB"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": {
+                                                "user": {
+                                                    "name": "john doe",
+                                                    "email": "john@doe.com"
+                                                },
+                                                "token": "Rnw5mhtGF7e"
+                                            },
+                                            "message": "Registered successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "success": false,
+                                            "data": null,
+                                            "errors": {
+                                                "email": [
+                                                    "The email field must be a valid email address."
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
