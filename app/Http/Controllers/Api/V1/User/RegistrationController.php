@@ -82,9 +82,13 @@ class RegistrationController extends Controller
 
         $token = $user->createToken(config('sanctum.login_token'))->plainTextToken;
 
-        return $this->success([
-            'user' => AuthResource::make($user),
-            'token' => $token
-        ], config('messages.auth.register_success'), Response::HTTP_CREATED);
+        return $this->success(
+            data: [
+                'user' => AuthResource::make($user),
+                'token' => $token
+            ],
+            message: config('messages.auth.register_success'),
+            code: Response::HTTP_CREATED
+        );
     }
 }
