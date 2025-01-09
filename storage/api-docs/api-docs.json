@@ -8,7 +8,7 @@
         "/api/v1/login": {
             "post": {
                 "summary": "user login",
-                "operationId": "2589fd8819e64156d848109ef9eb7201",
+                "operationId": "05d536c846963ff3d47fe782fa7f5435",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -76,7 +76,7 @@
         "/api/v1/logout": {
             "post": {
                 "summary": "user logout",
-                "operationId": "8b3a1a97296a154f23c38e7fe96ad47c",
+                "operationId": "90c6c29d208bd685486aca10d32d3dd4",
                 "responses": {
                     "200": {
                         "description": "Logout success",
@@ -97,10 +97,152 @@
                 }
             }
         },
+        "/api/v1/forgot-password": {
+            "post": {
+                "summary": "user reset password",
+                "operationId": "e9dea57b981b47ff86a3786308ed9036",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "email"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "john@doe.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Link sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": [],
+                                            "message": "A reset link has been sent to your email."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many attempts",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "Too Many Attempts."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reset-password": {
+            "post": {
+                "summary": "user reset password",
+                "operationId": "543c68a861604eb76de1e4934ec9884f",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "email"
+                                    },
+                                    "token": {
+                                        "type": "email"
+                                    },
+                                    "password": {
+                                        "type": "email"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "john@doe.com",
+                                    "token": "ki8191kaa",
+                                    "password": "Pww123##pp"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": [],
+                                            "message": "Your password has been updated successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result-1": {
+                                        "summary": "invalid token",
+                                        "value": {
+                                            "success": false,
+                                            "data": null,
+                                            "errors": {
+                                                "token": [
+                                                    "Reset link is invalid or has expired."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "result-2": {
+                                        "summary": "invalid email",
+                                        "value": {
+                                            "success": false,
+                                            "data": null,
+                                            "errors": {
+                                                "email": [
+                                                    "Invalid email."
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/register": {
             "post": {
                 "summary": "user registration",
-                "operationId": "285fdd9a47395c6423af27fbc07fc03d",
+                "operationId": "ef1fc55fd1293ef6d3c0a18421f914ee",
                 "requestBody": {
                     "content": {
                         "application/json": {

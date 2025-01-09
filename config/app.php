@@ -123,4 +123,25 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Password Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This value represents the Frontend application domain
+    | This value will be used when sending mails to users.
+    |
+    */
+    'new_password_form_url' => env('FRONTEND_APP_DOMAIN', 'test.com'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Password Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This value represents the length of the reset password token.
+    |
+    */
+    'reset_password_token_length' => 60
+
 ];
