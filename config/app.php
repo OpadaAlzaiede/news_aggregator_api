@@ -142,6 +142,16 @@ return [
     | This value represents the length of the reset password token.
     |
     */
-    'reset_password_token_length' => 60
+    'reset_password_token_length' => 60,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Password Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This value represents the lifetime of the reset password token in seconds.
+    |
+    */
+    'reset_password_token_lifetime' => 60
 
 ];

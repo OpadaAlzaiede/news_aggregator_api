@@ -28,7 +28,7 @@ class ValidResetPasswordTokenRule implements ValidationRule
 
         if(isset($this->passwordResetToken)) {
 
-            if(Carbon::createFromTimeString($this->passwordResetToken->created_at)->diffInMinutes(now()) >= 60) {
+            if(Carbon::createFromTimeString($this->passwordResetToken->created_at)->diffInMinutes(now()) >= config('app.reset_password_token_lifetime', 60)) {
 
                 $passes = false;
             }
