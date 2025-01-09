@@ -78,6 +78,34 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
+        public function test_user_cannot_reset_password_with_expired_token() {
+
+        $user = User::factory()->create();
+        $passwordResetToken = PasswordResetToken::factory()->create([
+            'email' => $user->email,
+            'created_at' => now()->subHour()
+        ]);
+        $newPassword = '9RQs67DF@#';
+
+        $response = $this->post(route('auth.reset-password'), [
+            'token' => $passwordResetToken->token,
+            'email' => $user->email,
+            'password' => $newPassword,
+            'password_confirmation' => $newPassword,
+        ]);
+
+        $user->refresh();
+
+        $response->assertJsonStructure([
+            'errors' => [
+                'token'
+            ]
+        ]);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertFalse(Hash::check($newPassword, $user->password));
+        $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
+    }
+
     public function test_user_cannot_reset_password_with_invalid_email() {
 
         $firstUser = User::factory()->create();
