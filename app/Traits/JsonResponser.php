@@ -22,6 +22,12 @@ trait JsonResponser {
         ], $code);
     }
 
+    /**
+     * @param string $message
+     * @param int $code
+     *
+     * @return JsonResponse
+     */
     public function error(string $message, int $code): JsonResponse {
 
         return response()->json([
