@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 
 trait JsonErrors {
 
@@ -21,7 +22,7 @@ trait JsonErrors {
                         'data'=>null,
                         'errors'=>$validator->errors()
                     ]
-                    , 200)
+                    , Response::HTTP_UNPROCESSABLE_ENTITY)
         );
     }
 }

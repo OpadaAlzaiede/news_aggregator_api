@@ -80,4 +80,6 @@ return [
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
+    'login_token' => env('SANCTUM_LOGIN_TOKEN', 'SECRET TOKEN')
+
 ];
