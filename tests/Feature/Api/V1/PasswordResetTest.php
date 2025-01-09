@@ -29,8 +29,7 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_can_reset_password_with_valid_email_token_and_password()
-    {
+    public function test_user_can_reset_password_with_valid_email_token_and_password(): void {
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
         $newPassword = '9RQs67DF@#';
@@ -53,7 +52,7 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseMissing('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_token() {
+    public function test_user_cannot_reset_password_with_invalid_token(): void {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
@@ -78,7 +77,7 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-        public function test_user_cannot_reset_password_with_expired_token() {
+    public function test_user_cannot_reset_password_with_expired_token(): void {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create([
@@ -106,7 +105,7 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_email() {
+    public function test_user_cannot_reset_password_with_invalid_email(): void {
 
         $firstUser = User::factory()->create();
         $secondUser = User::factory()->create();
@@ -133,7 +132,7 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $firstUser->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_password() {
+    public function test_user_cannot_reset_password_with_invalid_password(): void {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
