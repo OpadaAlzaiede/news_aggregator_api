@@ -5,6 +5,98 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/v1/login": {
+            "post": {
+                "summary": "user login",
+                "operationId": "2589fd8819e64156d848109ef9eb7201",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "email"
+                                    },
+                                    "password": {
+                                        "type": "password"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "john@doe.com",
+                                    "password": "re412##AB"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": {
+                                                "user": {
+                                                    "name": "john doe",
+                                                    "email": "john@doe.com"
+                                                },
+                                                "token": "Rnw5mhtGF7e"
+                                            },
+                                            "message": "You have logged in successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "failed login",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "The provided credentials don't match our records."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "summary": "user logout",
+                "operationId": "8b3a1a97296a154f23c38e7fe96ad47c",
+                "responses": {
+                    "200": {
+                        "description": "Logout success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "You have logged out successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/register": {
             "post": {
                 "summary": "user registration",
