@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Tests\TestCase;
+use Tests\Feature\Api\TestCase;
 use App\Models\User;
 use App\Models\PasswordResetToken;
 use Illuminate\Support\Facades\Notification;
