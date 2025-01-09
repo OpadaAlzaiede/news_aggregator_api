@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 
-Route::post('register', RegistrationController::class)->name('users.register');
+Route::post('register', RegistrationController::class)->name('auth.register');
 Route::post('login', [LoginController::class, 'login'])->name('auth.login');
 
 Route::post('forgot-password', [PasswordResetController::class, 'sendLink'])->name('auth.forgot-password')->middleware('throttle:1,60');

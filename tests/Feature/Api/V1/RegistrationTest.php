@@ -20,7 +20,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => '9RQs67DF@#'
         ];
 
-        $response = $this->post(route('users.register'), $data);
+        $response = $this->post(route('auth.register'), $data);
 
         $response->assertStatus(Response::HTTP_CREATED);
         $this->assertDatabaseHas('users', ['email' => $data['email']]);
@@ -37,7 +37,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => $passwordConfirmation
         ];
 
-        $response = $this->post(route('users.register'), $data);
+        $response = $this->post(route('auth.register'), $data);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertDatabaseMissing('users', ['email' => $data['email']]);
