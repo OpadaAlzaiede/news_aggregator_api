@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\User;
+namespace App\Http\Controllers\Api\V1\Auth;
 
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\AuthResource;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthController extends Controller
+class LoginController extends Controller
 {
 
     /**
