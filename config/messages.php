@@ -15,4 +15,8 @@ return [
         'email_already_verified' => 'Email has already been verified.',
         'email_verified' => 'Email verified successfully.',
     ],
+
+    'preferences_set_successfully' => 'Your preferences have been set successfully.',
+    'preferences_set_failed' => 'An error occurred while setting preferences.',
+    'preferences_deleted_successfully' => 'Your preferences have been deleted successfully.'
 ];
