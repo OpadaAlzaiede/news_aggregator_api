@@ -5,6 +5,113 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/v1/articles": {
+            "get": {
+                "summary": "articles resource",
+                "operationId": "daffc9d151a0c7c956d1157d38e78859",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date of the article",
+                        "required": false,
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "The category of the article",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "in": "query",
+                        "description": "The source of the article",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "number of articles per page",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": {
+                                                "slug": "article1",
+                                                "title": "article1",
+                                                "description": "Laborum nesciunt ..",
+                                                "content": "etur minus architect ..",
+                                                "author": "r King",
+                                                "category": "science",
+                                                "source": "Newscred",
+                                                "published_at": "2020-01-01"
+                                            },
+                                            "links": {
+                                                "first": "articles?page=1",
+                                                "next": "articles?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "path": "/articles",
+                                                "per_page": 10,
+                                                "to": 10
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "unauthenticated."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/login": {
             "post": {
                 "summary": "user login",
