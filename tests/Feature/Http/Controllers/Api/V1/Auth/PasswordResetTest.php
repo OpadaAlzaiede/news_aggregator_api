@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Tests\Feature\Api\TestCase;
 use App\Models\User;
 use App\Models\PasswordResetToken;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\HttpFoundation\Response;
+use Tests\Feature\Http\Controllers\Api\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Notifications\CustomPasswordResetNotification;
-use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 
 class PasswordResetTest extends TestCase
 {

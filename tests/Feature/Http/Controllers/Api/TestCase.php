@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Http\Controllers\Api;
 
 abstract class TestCase extends \Tests\TestCase
 {

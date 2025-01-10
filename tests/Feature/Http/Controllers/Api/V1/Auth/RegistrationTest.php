@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature\Api\V1;
+namespace Tests\Feature\Http\Controllers\Api\V1\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Tests\Feature\Api\TestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Tests\Feature\Http\Controllers\Api\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegistrationTest extends TestCase
 {
