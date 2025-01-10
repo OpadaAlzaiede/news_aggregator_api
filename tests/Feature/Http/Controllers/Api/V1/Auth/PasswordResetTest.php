@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\V1;
+namespace Tests\Feature\Http\Controllers\Api\V1\Auth;
 
 use App\Models\User;
 use App\Models\PasswordResetToken;
@@ -30,6 +30,7 @@ class PasswordResetTest extends TestCase
     }
 
     public function test_user_can_reset_password_with_valid_email_token_and_password(): void {
+
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
         $newPassword = '9RQs67DF@#';

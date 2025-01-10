@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\Feature\Http\Controllers\Api\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
@@ -24,7 +25,6 @@ class RegistrationTest extends TestCase
 
         $response->assertStatus(Response::HTTP_CREATED);
         $this->assertDatabaseHas('users', ['email' => $data['email']]);
-        $this->assertArrayHasKey('token', $response->json('data'));
     }
 
     #[DataProvider('invalidRegistrationData')]

@@ -11,6 +11,8 @@ return [
         'invalid_or_expired_token' => 'Reset link is invalid or has expired.',
         'user_does_not_exist' => 'User doesn\'t exist.',
         'invalid_email' => 'Invalid email.',
-        'password_update_success' => 'Your password has been updated successfully.'
+        'password_update_success' => 'Your password has been updated successfully.',
+        'email_already_verified' => 'Email has already been verified.',
+        'email_verified' => 'Email verified successfully.',
     ],
 ];
