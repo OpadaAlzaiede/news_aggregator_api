@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\Feature\Http\Controllers\Api\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AuthTest extends TestCase
+class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
