@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserHasPreferences
+class RequireJsonMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,13 +15,13 @@ class UserHasPreferences
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->hasPreferences()) {
+        if($request->is('api/*') && !$request->wantsJson()) {
 
-            return $next($request);
+            return response()->json([
+                'message' => 'Please request with HTTP header: Accept: application/json'
+            ], Response::HTTP_NOT_ACCEPTABLE);
         }
 
-        return response()->json([
-            'message' => 'user doesn\'t have preferences.'
-        ], Response::HTTP_UNAUTHORIZED);
+        return $next($request);
     }
 }

@@ -5,7 +5,7 @@ namespace Tests\Feature\Http\Middleware;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Middleware\RequireJson;
+use App\Http\Middleware\RequireJsonMiddleware;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -18,7 +18,7 @@ class RequireJsonMiddlewareTest extends TestCase
             return new SymfonyResponse();
         };
 
-        $response = (new RequireJson())->handle($request, $next);
+        $response = (new RequireJsonMiddleware())->handle($request, $next);
 
         $this->assertEquals(Response::HTTP_NOT_ACCEPTABLE, $response->getStatusCode());
     }
@@ -31,7 +31,7 @@ class RequireJsonMiddlewareTest extends TestCase
             return new SymfonyResponse();
         };
 
-        $response = (new RequireJson())->handle($request, $next);
+        $response = (new RequireJsonMiddleware())->handle($request, $next);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }

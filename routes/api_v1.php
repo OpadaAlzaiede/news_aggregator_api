@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Middleware\RequireJson;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\UserHasPreferences;
 use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Middleware\VerifiedEmailMiddleware;
 use App\Http\Controllers\Api\V1\ArticleController;
@@ -11,8 +9,10 @@ use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
+use App\Http\Middleware\RequireJsonMiddleware;
+use App\Http\Middleware\UserHasPreferencesMiddleware;
 
-Route::middleware(RequireJson::class)->group(function() {
+Route::middleware(RequireJsonMiddleware::class)->group(function() {
 
     /* Auth Routes */
     Route::post('register', RegistrationController::class)->name('auth.register');
@@ -23,7 +23,7 @@ Route::middleware(RequireJson::class)->group(function() {
 
     Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
-        ->withoutMiddleware(RequireJson::class)
+        ->withoutMiddleware(RequireJsonMiddleware::class)
         ->name('verification.verify');
 
 
@@ -39,7 +39,7 @@ Route::middleware(RequireJson::class)->group(function() {
         Route::post('preferences', [UserPreferenceController::class, 'store'])->name('preferences.store')->middleware('throttle:10,1');
         Route::delete('preferences', [UserPreferenceController::class, 'destroy'])->name('preferences.destroy');
 
-        Route::get('feed', FeedController::class)->name('feed.index')->middleware(UserHasPreferences::class);
+        Route::get('feed', FeedController::class)->name('feed.index')->middleware(UserHasPreferencesMiddleware::class);
 
         Route::post('logout', [LoginController::class, 'logout'])->name('auth.logout');
     });
