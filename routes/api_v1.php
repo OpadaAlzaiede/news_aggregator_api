@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
+use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Middleware\RequireJson;
 
@@ -36,6 +37,7 @@ Route::middleware(RequireJson::class)->group(function() {
         Route::post('preferences', [UserPreferenceController::class, 'store'])->name('preferences.store')->middleware('throttle:10,1');
         Route::delete('preferences', [UserPreferenceController::class, 'destroy'])->name('preferences.destroy');
 
+        Route::get('feed', FeedController::class)->name('feed.index');
 
         Route::post('logout', [LoginController::class, 'logout'])->name('auth.logout');
     });
