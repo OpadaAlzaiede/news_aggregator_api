@@ -152,6 +152,19 @@ return [
     | This value represents the lifetime of the reset password token in seconds.
     |
     */
-    'reset_password_token_lifetime' => 60
+    'reset_password_token_lifetime' => 60,
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pagination default settings
+    |--------------------------------------------------------------------------
+    |
+    | This values represents for the perPage & page pagination default values
+    |
+    */
+    'pagination' => [
+        'per_page' => 10,
+        'page' => 1
+    ]
 ];

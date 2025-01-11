@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Article;
+use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ArticleResource;
@@ -11,13 +12,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ArticleController extends Controller
 {
-    private int $perPage;
-    private int $page;
+    use Pagination;
 
     public function __construct(Request $request) {
 
-        $this->perPage = $request->input('perPage', 10);
-        $this->page = $request->input('page', 1);
+        $this->setPaginationParams($request);
     }
 
     /**

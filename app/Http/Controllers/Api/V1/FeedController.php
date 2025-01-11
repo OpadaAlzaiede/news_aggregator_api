@@ -6,17 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\ArticleResource;
+use App\Traits\Pagination;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class FeedController extends Controller
 {
-    private int $perPage;
-    private int $page;
+    use Pagination;
 
     public function __construct(Request $request) {
 
-        $this->perPage = $request->input('perPage', 10);
-        $this->page = $request->input('page', 1);
+        $this->setPaginationParams($request);
     }
 
 
