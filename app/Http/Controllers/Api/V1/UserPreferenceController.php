@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\HasPreferencesEnum;
 use App\Models\UserPreference;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +65,10 @@ class UserPreferenceController extends Controller
                 ]);
             }
 
+
             DB::commit();
 
+            $user->update(['has_preferences' => HasPreferencesEnum::YES->value]);
             Cache::forget('user_preferences'.$user->id);
             SyncUserFeedJob::dispatch($user);
 
@@ -94,6 +97,7 @@ class UserPreferenceController extends Controller
 
         UserPreference::where('user_id', $user->id)->delete();
         $user->feed()->delete();
+        $user->update(['has_preferences' => HasPreferencesEnum::NO->value]);
 
         Cache::forget('user_preferences'.$user->id);
 

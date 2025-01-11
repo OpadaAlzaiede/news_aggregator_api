@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'has_preferences'
     ];
 
     /**
@@ -49,6 +50,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function hasPreferences(): bool {
+
+        return $this->has_preferences;
     }
 
     /**
