@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\Article;
+namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IndexResource extends JsonResource
+class ArticleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,6 +18,7 @@ class IndexResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'description' => $this->description,
+            'content' => $this->content,
             'author' => $this->author,
             'category' => $this->category,
             'source' => $this->source,
