@@ -104,7 +104,7 @@ class UserPreferenceController extends Controller
         return $this->success(
             data:[],
             message: config('messages.preferences_deleted_successfully'),
-            code: Response::HTTP_CREATED
+            code: Response::HTTP_OK
         );
     }
 }

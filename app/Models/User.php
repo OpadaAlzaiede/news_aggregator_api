@@ -54,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasPreferences(): bool {
 
-        return $this->has_preferences;
+        return (bool) $this->has_preferences;
     }
 
     /**
