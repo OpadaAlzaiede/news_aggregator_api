@@ -23,6 +23,18 @@ class LoginTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
+    public function test_user_with_unverified_email_cannot_login(): void {
+
+        $user = User::factory()->create(['email_verified_at' => null]);
+
+        $response = $this->post(route('auth.login'), [
+            'email' => $user->email,
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
     public function test_user_cannot_login_with_invalid_credentials(): void {
 
         $response = $this->post(route('auth.login'), [

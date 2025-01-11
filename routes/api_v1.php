@@ -4,6 +4,7 @@ use App\Http\Middleware\RequireJson;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\UserHasPreferences;
 use App\Http\Controllers\Api\V1\FeedController;
+use App\Http\Middleware\VerifiedEmailMiddleware;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
@@ -15,7 +16,7 @@ Route::middleware(RequireJson::class)->group(function() {
 
     /* Auth Routes */
     Route::post('register', RegistrationController::class)->name('auth.register');
-    Route::post('login', [LoginController::class, 'login'])->name('auth.login');
+    Route::post('login', [LoginController::class, 'login'])->name('auth.login')->middleware(VerifiedEmailMiddleware::class);
 
     Route::post('forgot-password', [PasswordResetController::class, 'sendLink'])->name('auth.forgot-password')->middleware('throttle:1,60');
     Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('auth.reset-password');
