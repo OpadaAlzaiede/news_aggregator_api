@@ -6,7 +6,8 @@ use App\Models\Article;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\ArticleResource;
+use App\Http\Resources\V1\Article\IndexResource;
+use App\Http\Resources\V1\Article\ShowResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -29,10 +30,10 @@ class ArticleController extends Controller
      *     path="/api/v1/articles",
      *     summary="articles resource",
      *     @OA\Parameter(
-     *          name="date",
+     *          name="published_at",
      *          in="query",
      *          required=false,
-     *          description="The date of the article",
+     *          description="The publish date of the article",
      *          @OA\Schema(
      *              type="date"
      *          ),
@@ -104,43 +105,40 @@ class ArticleController extends Controller
      */
     public function index(): AnonymousResourceCollection {
 
-        $articles = Article::query()
-                    ->when(request('date'), function($query, $date) {
-                        $query->whereDate('published_at', $date);
-                    })
-                    ->when(request('category'), function($query, $category) {
-                        $query->where('category', 'LIKE', $category . '%');
-                    })
-                    ->when(request('source'), function($query, $source) {
-                        $query->where('source', 'LIKE', $source . '%');
-                    })
-                    ->latest('id')
-                    ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
+        $query = Article::query()
+                        ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at']);
 
-        return ArticleResource::collection($articles);
+        $query->when(request('keyword'), function ($query, $keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->whereFullText(
+                    ['title', 'description', 'content'],
+                    $keyword,
+                    ['mode' => 'boolean']
+                );
+            });
+        });
+
+        $query->when(!request('keyword'), function ($query) {
+            $query->when(request('published_at'), function ($query, $date) {
+                $query->whereDate('published_at', $date);
+            });
+
+            $query->when(request('category'), function ($query, $category) {
+                $query->where('category', 'LIKE', $category . '%');
+            });
+
+            $query->when(request('source'), function ($query, $source) {
+                $query->where('source', 'LIKE', $source . '%');
+            });
+
+            $query->latest('id');
+        });
+
+        $articles = $query->simplePaginate($this->perPage, ['*'], 'page', $this->page);
+
+        return IndexResource::collection($articles);
     }
 
-    /**
-     * Return a list of articles with keyword search
-     *
-     * @return AnonymousResourceCollection
-     */
-    public function indexByKeyword() {
-
-        $articles = Article::query()
-                    ->when(request('keyword'), function($query, $keyword) {
-                        $query->whereFullText(
-                            ['title', 'description', 'content'],
-                            $keyword,
-                            ['mode' => 'boolean']
-                        );
-                    }, function($query) {
-                        $query->latest('id');
-                    })
-                    ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
-
-        return ArticleResource::collection($articles);
-    }
 
     /**
      * @param Article $article
@@ -150,6 +148,6 @@ class ArticleController extends Controller
 
     public function show(Article $article): JsonResource {
 
-        return ArticleResource::make($article);
+        return ShowResource::make($article);
     }
 }

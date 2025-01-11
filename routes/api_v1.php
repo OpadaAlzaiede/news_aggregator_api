@@ -31,7 +31,6 @@ Route::middleware(RequireJsonMiddleware::class)->group(function() {
 
         /* Article Routes */
         Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');
-        Route::get('articles/by-keyword', [ArticleController::class, 'indexByKeyword'])->name('articles.indexByKeyword');
         Route::get('articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
         /* Preferences Routes */

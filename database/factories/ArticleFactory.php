@@ -19,7 +19,7 @@ class ArticleFactory extends Factory
         return [
             'title' => fake()->text(10),
             'description' => fake()->text(100),
-            'content' => fake()->text(100),
+            'content' => fake()->text(200),
             'category' => fake()->text(10),
             'author' => fake()->name(),
             'source' => fake()->text(10),
