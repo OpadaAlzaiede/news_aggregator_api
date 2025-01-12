@@ -6,5 +6,9 @@ use Carbon\Carbon;
 
 interface NewsFetchContract {
 
-    public function fetchArticles(?string $keyword, Carbon $syncFrom);
+    /**
+     * @param ?string $keyword
+     * @param ?Carbon $syncFrom
+     */
+    public function fetchArticles(?string $keyword, ?Carbon $syncFrom);
 }
