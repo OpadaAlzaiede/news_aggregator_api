@@ -23,8 +23,8 @@ return new class extends Migration
             $table->text('content');
             $table->string('category', 255)->nullable();
             $table->string('author', 255)->nullable();
-            $table->string('source', 255);
-            $table->date('published_at');
+            $table->string('source', 255)->nullable();
+            $table->date('published_at')->default(now());
 
             $table->index('published_at');
             $table->index('category');

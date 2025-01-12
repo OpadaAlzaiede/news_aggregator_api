@@ -24,7 +24,7 @@ class Article extends Model
 
         parent::boot();
 
-        static::saving(function ($model) {
+        static::creating(function ($model) {
             $model->slug = Str::slug($model->title);
         });
     }
