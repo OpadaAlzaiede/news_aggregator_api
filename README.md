@@ -10,6 +10,12 @@ Users can perform basic auth functionalities (register, log-in, log-out, reset-p
 2. Articles:
 Users can request articles with filter on (date, category or sources), they can also do keyword search within the contents of the articles.
 
+3. Preferences:
+Users can store preferences related to their favorite (categories, authors, ..)
+They can fetch and delete all their preferences
+
+4. Feed:
+Users with preferences can access the Feed resource, which has articles stored based on their preferences.
 ## Installation
 
 1. Clone the repository:
