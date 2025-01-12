@@ -29,11 +29,16 @@ abstract class GenericNewsApi implements NewsFetchContract {
             if($response->ok()) {
 
                 $this->createArticles(articles: $response->json($this->getResponseArticlesKey()));
+
+                Log::channel('sync_success')->info("syncing news from ".$endpoint);
+            }else {
+
+                Log::channel('sync_failure')->error("syncing news from ".$endpoint, ['response' => $response]);
             }
 
         } catch(\Throwable $e) {
 
-            Log::error("error fetching articles from $endpoint" . $e->getMessage());
+            Log::channel('sync_failure')->error("syncing news from ".$endpoint, ['exception' => $e->getMessage()]);
         }
     }
 

@@ -127,6 +127,17 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'sync_success' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sync_success.log'),
+            'level' => 'info',
+        ],
+
+        'sync_failure' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sync_failure.log'),
+            'level' => 'error',
+        ],
     ],
 
 ];
