@@ -18,5 +18,11 @@ return [
 
     'preferences_set_successfully' => 'Your preferences have been set successfully.',
     'preferences_set_failed' => 'An error occurred while setting preferences.',
-    'preferences_deleted_successfully' => 'Your preferences have been deleted successfully.'
+    'preferences_deleted_successfully' => 'Your preferences have been deleted successfully.',
+
+    'errors' => [
+        '404' => 'record not found.',
+        '429' => 'too many requests.',
+        '401' => 'unauthorized.'
+    ]
 ];
