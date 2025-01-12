@@ -38,9 +38,9 @@ services:
     container_name: laravel_mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: news_aggregator_db
-      MYSQL_USER: db_user
-      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
