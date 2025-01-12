@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\Article\ShowResource;
 use App\Http\Resources\V1\ArticleResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -30,6 +29,17 @@ class ArticleController extends Controller
      * @OA\Get(
      *     path="/api/v1/articles",
      *     summary="articles resource",
+     *     tags={"articles"},
+     *     security={ {"sanctum": {} }},
+     *      @OA\Parameter(
+     *          name="keyword",
+     *          in="query",
+     *          required=false,
+     *          description="Global search keyword",
+     *          @OA\Schema(
+     *              type="string"
+     *          ),
+     *     ),
      *     @OA\Parameter(
      *          name="published_at",
      *          in="query",
@@ -159,7 +169,51 @@ class ArticleController extends Controller
      *
      * @return JsonResource
      */
-
+    /**
+     * Return a list of articles
+     *
+     * @return AnonymousResourceCollection
+     */
+    /**
+     * @OA\Get(
+     *     path="/api/v1/articles/{article}",
+     *     summary="show article",
+     *     tags={"articles"},
+     *     security={ {"sanctum": {} }},
+     *      @OA\Parameter(
+     *          name="article",
+     *          in="path",
+     *          required=false,
+     *          description="article slug",
+     *          @OA\Schema(
+     *              type="string"
+     *          ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Examples(
+     *                  example="result",
+     *                  value={"slug": "totam", "title": "Totam", "description": "Vel quos occaecati", "content": "Iure et vero facere ",
+     *                          "author": "Prof. Deven Brei", "category": "Excepturi", "source": "Sint", "published_at": "1987-05-02"},
+     *                  summary="An result object."
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="record not found",
+     *         @OA\JsonContent(
+     *             @OA\Examples(
+     *                  example="result",
+     *                  value={"message": "record not found."},
+     *                  summary="An result object."
+     *             ),
+     *          )
+     *      )
+     * )
+     */
     public function show(Article $article): JsonResource {
 
         return ArticleResource::make($article);

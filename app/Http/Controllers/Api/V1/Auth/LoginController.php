@@ -21,6 +21,7 @@ class LoginController extends Controller
      * @OA\Post(
      *     path="/api/v1/login",
      *     summary="user login",
+     *     tags={"auth"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
@@ -34,8 +35,8 @@ class LoginController extends Controller
      *                     type="password"
      *                 ),
      *                 example={
-     *                      "email": "john@doe.com",
-     *                      "password": "re412##AB",
+     *                      "email": "swagger@test.com",
+     *                      "password": "password",
      *                 }
      *             )
      *         )
@@ -98,6 +99,8 @@ class LoginController extends Controller
      * @OA\Post(
      *     path="/api/v1/logout",
      *     summary="user logout",
+     *     tags={"auth"},
+     *    security={ {"sanctum": {} }},
      *     @OA\Response(
      *         response=200,
      *         description="Logout success",

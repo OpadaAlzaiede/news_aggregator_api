@@ -7,13 +7,25 @@
     "paths": {
         "/api/v1/articles": {
             "get": {
+                "tags": [
+                    "articles"
+                ],
                 "summary": "articles resource",
                 "operationId": "daffc9d151a0c7c956d1157d38e78859",
                 "parameters": [
                     {
-                        "name": "date",
+                        "name": "keyword",
                         "in": "query",
-                        "description": "The date of the article",
+                        "description": "Global search keyword",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "published_at",
+                        "in": "query",
+                        "description": "The publish date of the article",
                         "required": false,
                         "schema": {
                             "type": "date"
@@ -109,11 +121,85 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/articles/{article}": {
+            "get": {
+                "tags": [
+                    "articles"
+                ],
+                "summary": "show article",
+                "operationId": "fd791615b93c76e36ff869b8831d9568",
+                "parameters": [
+                    {
+                        "name": "article",
+                        "in": "path",
+                        "description": "article slug",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "slug": "totam",
+                                            "title": "Totam",
+                                            "description": "Vel quos occaecati",
+                                            "content": "Iure et vero facere ",
+                                            "author": "Prof. Deven Brei",
+                                            "category": "Excepturi",
+                                            "source": "Sint",
+                                            "published_at": "1987-05-02"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "record not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "record not found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/v1/login": {
             "post": {
+                "tags": [
+                    "auth"
+                ],
                 "summary": "user login",
                 "operationId": "05d536c846963ff3d47fe782fa7f5435",
                 "requestBody": {
@@ -130,8 +216,8 @@
                                 },
                                 "type": "object",
                                 "example": {
-                                    "email": "john@doe.com",
-                                    "password": "re412##AB"
+                                    "email": "swagger@test.com",
+                                    "password": "password"
                                 }
                             }
                         }
@@ -182,6 +268,9 @@
         },
         "/api/v1/logout": {
             "post": {
+                "tags": [
+                    "auth"
+                ],
                 "summary": "user logout",
                 "operationId": "90c6c29d208bd685486aca10d32d3dd4",
                 "responses": {
@@ -201,11 +290,19 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/v1/forgot-password": {
             "post": {
+                "tags": [
+                    "auth"
+                ],
                 "summary": "user reset password",
                 "operationId": "e9dea57b981b47ff86a3786308ed9036",
                 "requestBody": {
@@ -264,6 +361,9 @@
         },
         "/api/v1/reset-password": {
             "post": {
+                "tags": [
+                    "auth"
+                ],
                 "summary": "user reset password",
                 "operationId": "543c68a861604eb76de1e4934ec9884f",
                 "requestBody": {
@@ -348,6 +448,9 @@
         },
         "/api/v1/register": {
             "post": {
+                "tags": [
+                    "auth"
+                ],
                 "summary": "user registration",
                 "operationId": "ef1fc55fd1293ef6d3c0a18421f914ee",
                 "requestBody": {
@@ -427,8 +530,234 @@
                     }
                 }
             }
+        },
+        "/api/v1/feed": {
+            "get": {
+                "tags": [
+                    "articles"
+                ],
+                "summary": "show feed",
+                "operationId": "5f7ebc67d32a8e52b2e54ccbf3bf0fb1",
+                "parameters": [
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "number of articles per page",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page number",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": {
+                                                "slug": "article1",
+                                                "title": "article1",
+                                                "description": "Laborum nesciunt ..",
+                                                "content": "etur minus architect ..",
+                                                "author": "r King",
+                                                "category": "science",
+                                                "source": "Newscred",
+                                                "published_at": "2020-01-01"
+                                            },
+                                            "links": {
+                                                "first": "articles?page=1",
+                                                "next": "articles?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "path": "/articles",
+                                                "per_page": 10,
+                                                "to": 10
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "user doesn't have preferences.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "message": "user doesn't have preferences."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/preferences": {
+            "get": {
+                "tags": [
+                    "preferences"
+                ],
+                "summary": "user preferences",
+                "operationId": "df6c970adbe38ff2fd32bb3d4d02739e",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": {
+                                                "preference_type": "author",
+                                                "0": "Koelpin"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "preferences"
+                ],
+                "summary": "set user preferences",
+                "operationId": "7eb122f4d23d7acfca2cc456a5f78d97",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "preferences": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "preference_type": {
+                                                    "type": "enum",
+                                                    "example": 1
+                                                },
+                                                "preference_value": {
+                                                    "type": "string",
+                                                    "example": "Koelpin"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": [],
+                                            "message": "Your preferences have been set successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "preferences"
+                ],
+                "summary": "delete user preferences",
+                "operationId": "432fde41e0548b47bb540ad49ebce502",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "data": [],
+                                            "message": "Your preferences have been deleted successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
+    "tags": [
+        {
+            "name": "articles",
+            "description": "articles"
+        },
+        {
+            "name": "auth",
+            "description": "auth"
+        },
+        {
+            "name": "preferences",
+            "description": "preferences"
+        }
+    ],
     "components": {
         "securitySchemes": {
             "sanctum": {

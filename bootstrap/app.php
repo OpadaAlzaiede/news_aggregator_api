@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function(Exception $e) {
+        $exceptions->render(function(ThrottleRequestsException | NotFoundHttpException $e) {
             return response()->json([
                 'message' => config('messages.errors.'.$e->getStatusCode())
             ], $e->getStatusCode());

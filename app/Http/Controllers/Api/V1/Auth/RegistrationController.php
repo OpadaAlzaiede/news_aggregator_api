@@ -22,6 +22,7 @@ class RegistrationController extends Controller
      * @OA\Post(
      *     path="/api/v1/register",
      *     summary="user registration",
+     *     tags={"auth"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",

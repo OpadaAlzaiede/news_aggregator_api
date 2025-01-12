@@ -21,6 +21,27 @@ class UserPreferenceController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
+    /**
+     * @OA\Get(
+     *     path="/api/v1/preferences",
+     *     summary="user preferences",
+     *     tags={"preferences"},
+     *     security={ {"sanctum": {} }},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Examples(
+     *                  example="result",
+     *                  value={
+     *                      "data": {"preference_type": "author", "Koelpin"}
+     *                  },
+     *                  summary="An result object."
+     *             ),
+     *         )
+     *     ),
+     * )
+     */
     public function index(): AnonymousResourceCollection{
 
         $user = Auth::user();
@@ -43,6 +64,51 @@ class UserPreferenceController extends Controller
      * @param StoreUserPreferenceRequest $request
      *
      * @return JsonResponse
+     */
+    /**
+     * @OA\Post(
+     *     path="/api/v1/preferences",
+     *     summary="set user preferences",
+     *     tags={"preferences"},
+     *     security={ {"sanctum": {} }},
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="preferences",
+     *                     type="array",
+     *                     @OA\Items(
+     *                          @OA\Property(
+     *                              property="preference_type",
+     *                              type="enum",
+     *                              example=1
+     *                          ),
+     **                          @OA\Property(
+     *                              property="preference_value",
+     *                              type="string",
+     *                              example="Koelpin"
+     *                          ),
+     *                     ),
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Examples(
+     *                  example="result",
+     *                  value={
+     *                      "data": {},
+     *                      "message" :"Your preferences have been set successfully."
+     *                  },
+     *                  summary="An result object."
+     *             ),
+     *         )
+     *     ),
+     * )
      */
     public function store(StoreUserPreferenceRequest $request): JsonResponse {
 
@@ -90,6 +156,28 @@ class UserPreferenceController extends Controller
     /**
      *
      * @return JsonResponse
+     */
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/preferences",
+     *     summary="delete user preferences",
+     *     tags={"preferences"},
+     *     security={ {"sanctum": {} }},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Examples(
+     *                  example="result",
+     *                  value={
+     *                      "data": {},
+     *                      "message": "Your preferences have been deleted successfully"
+     *                  },
+     *                  summary="An result object."
+     *             ),
+     *         )
+     *     ),
+     * )
      */
     public function destroy(): JsonResponse {
 
