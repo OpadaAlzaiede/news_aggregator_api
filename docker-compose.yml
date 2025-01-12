@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # PHP-FPM container
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    # Mount the current directory to get immediate code changes
+    volumes:
+      - .:/var/www/html
+    # Expose port 9000 internally for Nginx to connect
+    expose:
+      - "9000"
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+
+  # Nginx container
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    ports:
+      - "80:80"        # Expose port 80 on your machine
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  # MySQL container
+  mysql:
+    image: mysql:8.0
+    container_name: laravel_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: news_aggregator_db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  dbdata:
