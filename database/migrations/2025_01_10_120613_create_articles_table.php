@@ -33,8 +33,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE articles ADD FULLTEXT title_description_content_fulltext_idx(title, description, content)');
+        if(! app()->runningUnitTests()) { /* Sqlite doesn't support full text index. */
 
+            DB::statement('ALTER TABLE articles ADD FULLTEXT title_description_content_fulltext_idx(title, description, content)');
+        }
     }
 
     /**

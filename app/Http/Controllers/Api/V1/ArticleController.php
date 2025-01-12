@@ -6,10 +6,10 @@ use App\Models\Article;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\ArticleResource;
+use App\Http\Resources\V1\Articles\IndexResource;
+use App\Http\Resources\V1\Articles\ShowResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
@@ -117,20 +117,7 @@ class ArticleController extends Controller
     public function index(): AnonymousResourceCollection {
 
         $query = Article::query()
-                        ->select([
-                            'title',
-                            'slug',
-                            'description',
-                            DB::raw("CASE WHEN CHAR_LENGTH(content) > 100
-                                    THEN CONCAT(SUBSTRING(content, 1, 100), '... [+', CHAR_LENGTH(content) - 100, ' chars]')
-                                    ELSE content
-                                    END AS content"
-                            ),
-                            'category',
-                            'author',
-                            'source',
-                            'published_at'
-                        ]);
+                        ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at']);
 
         $query->when(request('keyword'), function ($query, $keyword) {
             $query->where(function ($query) use ($keyword) {
@@ -160,7 +147,7 @@ class ArticleController extends Controller
 
         $articles = $query->simplePaginate($this->perPage, ['*'], 'page', $this->page);
 
-        return ArticleResource::collection($articles);
+        return IndexResource::collection($articles);
     }
 
 
@@ -216,6 +203,6 @@ class ArticleController extends Controller
      */
     public function show(Article $article): JsonResource {
 
-        return ArticleResource::make($article);
+        return ShowResource::make($article);
     }
 }

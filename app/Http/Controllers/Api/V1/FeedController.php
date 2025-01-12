@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\V1\ArticleResource;
+use App\Http\Resources\V1\Articles\IndexResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class FeedController extends Controller
@@ -83,22 +82,9 @@ class FeedController extends Controller
     public function __invoke(): AnonymousResourceCollection {
 
         $feed = Auth::user()->feed()
-                    ->select([
-                        'title',
-                        'slug',
-                        'description',
-                        DB::raw("CASE WHEN CHAR_LENGTH(content) > 100
-                            THEN CONCAT(SUBSTRING(content, 1, 100), '... [+', CHAR_LENGTH(content) - 100, ' chars]')
-                            ELSE content
-                            END AS content"
-                        ),
-                        'category',
-                        'author',
-                        'source',
-                        'published_at'
-                    ])
+                    ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at'])
                     ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
 
-        return ArticleResource::collection($feed);
+        return IndexResource::collection($feed);
     }
 }
