@@ -43,7 +43,12 @@ DB_PASSWORD=your_database_username_password
 docker-compose up -d
 ```
 
-5. Run the following docker command to run migrations and seeders within the app container
+5. Run the following composer command to install dependencies:
+```composer
+docker-compose exec app composer install
+```
+
+6. Run the following docker command to run migrations and seeders within the app container
 
 ```docker
 docker-compose exec app php artisan migrate:fresh --seed
