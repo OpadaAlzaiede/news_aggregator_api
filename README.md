@@ -87,3 +87,13 @@ To access swagger documentation visit the following url
 
 http://localhost/api/documentation
 
+
+## Development process
+
+1. Create plan of actions (I always start with building plan of actions doc which can be found at the link):
+
+https://drive.google.com/file/d/1NbmqcsEteBwcItKhLc1GZ1-UNvzXQfVU/view?usp=sharing
+
+2. Design the ERD (you can view the final erd through this link):
+
+https://drive.google.com/file/d/1vtkvvdGfoejKnS4tEOveD4IFUl9h4YTr/view?usp=sharing
