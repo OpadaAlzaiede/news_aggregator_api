@@ -58,4 +58,16 @@ To run tests, run the following command
 docker-compose exec app php artisan test
 ```
 
+You can run tests in parallel, by passing --parallel tag to the test command
 
+```docker
+docker-compose exec app php artisan test --parallel
+```
+
+## Api documentation
+
+To access swagger documentation visit the following url
+
+```docker
+http://127.0.0.1:8000/api/documentation
+```
