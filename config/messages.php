@@ -21,9 +21,12 @@ return [
         'request_with_json' => 'Please request with HTTP header: Accept: application/json'
     ],
 
-    'preferences_set_successfully' => 'Your preferences have been set successfully.',
-    'preferences_set_failed' => 'An error occurred while setting preferences.',
-    'preferences_deleted_successfully' => 'Your preferences have been deleted successfully.',
+    'preferences' => [
+        'preferences_set_successfully' => 'Your preferences have been set successfully.',
+        'preferences_set_failed' => 'An error occurred while setting preferences.',
+        'preferences_deleted_successfully' => 'Your preferences have been deleted successfully.',
+        'preferences_deletion_failed' => 'An error occurred while deleting preferences.',
+    ],
 
     'errors' => [
         '404' => 'record not found.',

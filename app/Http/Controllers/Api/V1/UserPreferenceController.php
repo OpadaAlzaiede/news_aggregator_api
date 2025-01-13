@@ -112,42 +112,34 @@ class UserPreferenceController extends Controller
      */
     public function store(StoreUserPreferenceRequest $request): JsonResponse {
 
-        try {
+        $user = Auth::user();
+        $preferences = $request->validated('preferences');
+        $preferencesArray = $this->buildPreferencesArray($preferences, $user->id);
 
-            $user = Auth::user();
+        try {
 
             DB::beginTransaction();
 
             $user->preferences()->delete();
-
-            $preferences = $request->validated('preferences');
-
-            foreach($preferences as $preference) {
-
-                UserPreference::create([
-                    'user_id' => $user->id,
-                    'preference_type' => $preference['preference_type'],
-                    'preference_value' => $preference['preference_value']
-                ]);
-            }
-
-
-            DB::commit();
-
             $user->update(['has_preferences' => HasPreferencesEnum::YES->value]);
+
+            UserPreference::insert($preferencesArray);
+
             Cache::forget('user_preferences'.$user->id);
             SyncUserFeedJob::dispatch($user);
 
+            DB::commit();
+
             return $this->success(
                 data:[],
-                message: config('messages.preferences_set_successfully'),
+                message: config('messages.preferences.preferences_set_successfully'),
                 code: Response::HTTP_CREATED
             );
         } catch(\Throwable $e) {
             DB::rollBack();
 
             return $this->error(
-                message: config('messages.preferences_set_failed'),
+                message: config('messages.preferences.preferences_set_failed'),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -183,16 +175,55 @@ class UserPreferenceController extends Controller
 
         $user = Auth::user();
 
-        UserPreference::where('user_id', $user->id)->delete();
-        $user->feed()->delete();
-        $user->update(['has_preferences' => HasPreferencesEnum::NO->value]);
+        try {
 
-        Cache::forget('user_preferences'.$user->id);
+            DB::beginTransaction();
 
-        return $this->success(
-            data:[],
-            message: config('messages.preferences_deleted_successfully'),
-            code: Response::HTTP_OK
-        );
+            $user->preferences()->delete();
+            $user->feed()->delete();
+            $user->update(['has_preferences' => HasPreferencesEnum::NO->value]);
+
+            Cache::forget('user_preferences'.$user->id);
+
+            DB::commit();
+
+            return $this->success(
+                data:[],
+                message: config('messages.preferences.preferences_deleted_successfully'),
+                code: Response::HTTP_OK
+            );
+        } catch(\Throwable $e) {
+
+            DB::rollBack();
+
+            return $this->error(
+                message: config('messages.preferences.preferences_deletion_failed'),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Setup the preferences array to bulk insert it in the DB
+     *
+     * @param array $preferences
+     * @param int $userId
+     *
+     * @return array
+     */
+    private function buildPreferencesArray(array $preferences, int $userId): array {
+
+        $preferencesArray = [];
+
+        foreach($preferences as $preference) {
+
+            $preferencesArray[] = [
+                'preference_type' => $preference['preference_type'],
+                'preference_value' => $preference['preference_value'],
+                'user_id' => $userId
+            ];
+        }
+
+        return $preferencesArray;
     }
 }
