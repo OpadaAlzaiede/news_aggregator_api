@@ -21,6 +21,8 @@ class SyncUserFeedJob implements ShouldQueue
 
     /**
      * Execute the job.
+     *
+     * @param SyncUserFeedAction $syncUserFeedAction
      */
     public function handle(SyncUserFeedAction $syncUserFeedAction): void
     {
