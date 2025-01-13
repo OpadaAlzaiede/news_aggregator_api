@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmailVerificationRequest extends FormRequest
 {
@@ -59,7 +60,7 @@ class EmailVerificationRequest extends FormRequest
         } catch(\Exception $exception) {
             return response()->json([
                 'message' => $exception->getMessage()
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return null;
