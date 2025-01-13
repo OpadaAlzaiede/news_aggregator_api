@@ -31,11 +31,4 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => config('messages.errors.'.$e->getStatusCode())
             ], $e->getStatusCode());
         });
-
-        $exceptions->render(function(Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json([
-                'message' => 'server error.'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        });
     })->create();
