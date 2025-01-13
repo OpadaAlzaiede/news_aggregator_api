@@ -125,10 +125,10 @@ class UserPreferenceController extends Controller
 
             UserPreference::insert($preferencesArray);
 
+            DB::commit();
+
             Cache::forget('user_preferences'.$user->id);
             SyncUserFeedJob::dispatch($user);
-
-            DB::commit();
 
             return $this->success(
                 data:[],
@@ -183,9 +183,9 @@ class UserPreferenceController extends Controller
             $user->feed()->delete();
             $user->update(['has_preferences' => HasPreferencesEnum::NO->value]);
 
-            Cache::forget('user_preferences'.$user->id);
-
             DB::commit();
+
+            Cache::forget('user_preferences'.$user->id);
 
             return $this->success(
                 data:[],
