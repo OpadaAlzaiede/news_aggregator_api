@@ -1,7 +1,7 @@
 # Laravel News Aggregator Api
 
 ## Introduction
-This is a simple Laravel api. it fetches and stores articles from different sources and provides a simple api to the users to access them.
+This is a simple Laravel 11 api. it fetches and stores articles from different sources and provides a simple api to the users to access them.
 
 ### Basic functionalities:
 1. Auth:
@@ -28,7 +28,7 @@ https://github.com/OpadaAlzaiede/news_aggregator_api
 cp .env.example .env
 ```
 
-3. Setup database conenction credentials within .env file:
+3. Setup database connection credentials within .env file:
 ```sh
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -69,6 +69,18 @@ You can run tests in parallel, by passing --parallel tag to the test command
 docker-compose exec app php artisan test --parallel
 ```
 
+## Scheduled tasks
+
+To listen for all dispatched jobs, run the following command
+
+```artisan
+docker-compose exec app php artisan queue:listen
+```
+
+You can view all scheduled tasks, using this command
+```artisan
+docker-compose exec app php artisan schedule:list
+```
 ## Api documentation
 
 To access swagger documentation visit the following url
