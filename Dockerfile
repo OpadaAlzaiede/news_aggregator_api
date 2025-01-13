@@ -13,9 +13,11 @@ RUN docker-php-ext-install pdo pdo_mysql zip gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/html
+COPY composer.json composer.lock ./
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+COPY . /var/www/html
 
 RUN php artisan key:generate
 

@@ -10,6 +10,7 @@ services:
     # Mount the current directory to get immediate code changes
     volumes:
       - .:/var/www/html
+      - vendor:/var/www/html/vendor
     # Expose port 9000 internally for Nginx to connect
     expose:
       - "9000"
@@ -54,3 +55,4 @@ networks:
 
 volumes:
   dbdata:
+  vendor:
