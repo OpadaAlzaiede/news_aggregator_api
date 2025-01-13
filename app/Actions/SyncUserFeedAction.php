@@ -21,7 +21,7 @@ class SyncUserFeedAction {
 
         $articleIds = [];
 
-        foreach(PreferenceForEnum::cases() as $case) {
+        foreach(PreferenceForEnum::cases() as $case) { // This has time complexity of O(1) as cases are limited.
 
             $preferencesByType = $this->filterPreferencesByType($user, $case->value);
 
@@ -29,12 +29,12 @@ class SyncUserFeedAction {
 
             if(Schema::hasColumn('articles', $columnName)) {
 
-                foreach($preferencesByType as $type) {
+                foreach($preferencesByType as $type) { // This also has time complexity of O(1) as we limited user's preferences count.
 
                     $preferredArticleIds = Article::query()
                                     ->select(['id'])
                                     ->where('published_at', '>', now()->subYear())
-                                    ->where($columnName, 'LIKE', '%'. $type->preference_value . '%')
+                                    ->where($columnName, 'LIKE', '%'. $type->preference_value . '%') // No worries with this search as we are using date filter.
                                     ->limit(10)
                                     ->pluck('id')
                                     ->toArray();
