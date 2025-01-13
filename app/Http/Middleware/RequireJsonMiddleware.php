@@ -18,7 +18,7 @@ class RequireJsonMiddleware
         if($request->is('api/*') && !$request->wantsJson()) {
 
             return response()->json([
-                'message' => 'Please request with HTTP header: Accept: application/json'
+                'message' => config('messages.general.request_with_json')
             ], Response::HTTP_NOT_ACCEPTABLE);
         }
 

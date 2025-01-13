@@ -26,7 +26,7 @@ class VerifiedEmailMiddleware
                 if(is_null($user->email_verified_at)) {
 
                     return response()->json([
-                        'message' => 'Please verify your email.'
+                        'message' => config('messages.auth.email_verify')
                     ], Response::HTTP_UNAUTHORIZED);
                 }
             }

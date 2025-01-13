@@ -22,7 +22,7 @@ class UserHasPreferencesMiddleware
         }
 
         return response()->json([
-            'message' => 'user doesn\'t have preferences.'
+            'message' => config('messages.general.preferences_not_set')
         ], Response::HTTP_UNAUTHORIZED);
     }
 }

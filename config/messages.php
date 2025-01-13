@@ -14,6 +14,11 @@ return [
         'password_update_success' => 'Your password has been updated successfully.',
         'email_already_verified' => 'Email has already been verified.',
         'email_verified' => 'Email verified successfully.',
+        'email_verify' > 'Please verify your email.'
+    ],
+    'general' => [
+        'preferences_not_set' => 'user doesn\'t have preferences.',
+        'request_with_json' => 'Please request with HTTP header: Accept: application/json'
     ],
 
     'preferences_set_successfully' => 'Your preferences have been set successfully.',
