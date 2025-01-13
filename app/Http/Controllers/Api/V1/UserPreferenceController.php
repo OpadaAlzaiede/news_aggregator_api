@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\HasPreferencesEnum;
-use App\Models\UserPreference;
+
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreUserPreferenceRequest;
-use App\Http\Resources\V1\UserPreferenceResource;
-use App\Jobs\SyncUserFeedJob;
+use App\Services\UserPreferencesService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserPreferenceController extends Controller
 {
+
+    public function __construct(private UserPreferencesService $userPreferencesService)
+    {
+        //
+    }
     /**
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
@@ -44,20 +44,7 @@ class UserPreferenceController extends Controller
      */
     public function index(): AnonymousResourceCollection{
 
-        $user = Auth::user();
-
-        $preferences = Cache::rememberForever('user_preferences'.$user->id, function() {
-
-            return UserPreference::query()
-                        ->select(['preference_type', 'preference_value'])
-                        ->where('user_id', Auth::id())
-                        ->when(request('preference_type'), function($query, $preference_type) {
-                            $query->where('preference_type', $preference_type);
-                        })
-                        ->get();
-        });
-
-        return UserPreferenceResource::collection($preferences);
+        return $this->userPreferencesService->index();
     }
 
     /**
@@ -112,23 +99,11 @@ class UserPreferenceController extends Controller
      */
     public function store(StoreUserPreferenceRequest $request): JsonResponse {
 
-        $user = Auth::user();
         $preferences = $request->validated('preferences');
-        $preferencesArray = $this->buildPreferencesArray($preferences, $user->id);
 
         try {
 
-            DB::beginTransaction();
-
-            $user->preferences()->delete();
-            $user->update(['has_preferences' => HasPreferencesEnum::YES->value]);
-
-            UserPreference::insert($preferencesArray);
-
-            DB::commit();
-
-            Cache::forget('user_preferences'.$user->id);
-            SyncUserFeedJob::dispatch($user);
+            $this->userPreferencesService->store($preferences);
 
             return $this->success(
                 data:[],
@@ -136,7 +111,6 @@ class UserPreferenceController extends Controller
                 code: Response::HTTP_CREATED
             );
         } catch(\Throwable $e) {
-            DB::rollBack();
 
             return $this->error(
                 message: config('messages.preferences.preferences_set_failed'),
@@ -173,19 +147,9 @@ class UserPreferenceController extends Controller
      */
     public function destroy(): JsonResponse {
 
-        $user = Auth::user();
-
         try {
 
-            DB::beginTransaction();
-
-            $user->preferences()->delete();
-            $user->feed()->delete();
-            $user->update(['has_preferences' => HasPreferencesEnum::NO->value]);
-
-            DB::commit();
-
-            Cache::forget('user_preferences'.$user->id);
+            $this->userPreferencesService->destroy();
 
             return $this->success(
                 data:[],
@@ -194,36 +158,10 @@ class UserPreferenceController extends Controller
             );
         } catch(\Throwable $e) {
 
-            DB::rollBack();
-
             return $this->error(
                 message: config('messages.preferences.preferences_deletion_failed'),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    /**
-     * Setup the preferences array to bulk insert it in the DB
-     *
-     * @param array $preferences
-     * @param int $userId
-     *
-     * @return array
-     */
-    private function buildPreferencesArray(array $preferences, int $userId): array {
-
-        $preferencesArray = [];
-
-        foreach($preferences as $preference) {
-
-            $preferencesArray[] = [
-                'preference_type' => $preference['preference_type'],
-                'preference_value' => $preference['preference_value'],
-                'user_id' => $userId
-            ];
-        }
-
-        return $preferencesArray;
     }
 }
