@@ -68,5 +68,5 @@ docker-compose exec app php artisan test --parallel
 
 To access swagger documentation visit the following url
 
-http://127.0.0.1:8000/api/documentation
+http://localhost/api/documentation
 
