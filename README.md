@@ -31,24 +31,58 @@ cp .env.example .env
 3. Setup database connection credentials within .env file:
 ```sh
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=your_database_name
 DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_username_password
 ```
 
-4. Run the following docker command to build the containers:
+4. Setup sanctum secret to use when generating new login tokens:
+```sh
+SANCTUM_LOGIN_TOKEN=
+```
+
+5. Setup your mail server credentials to deal with email verification and password resets mails:
+```sh
+MAIL_MAILER=
+MAIL_SCHEME=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME=
+```
+
+6. Configure frontend app domain, to send proper mail notifications:
+```sh
+FRONTEND_APP_DOMAIN=
+```
+
+7. Setup api keys to deal with news sources:
+```sh
+NEWS_API_KEY=
+NYT_API_KEY=
+```
+
+
+8. Run the following docker command to build the containers:
 ```docker
 docker-compose up -d
 ```
 
-5. Run the following docker command to run migrations and seeders within the app container
+9. Run the following docker command to run migrations and seeders within the app container
 
 ```docker
 docker-compose exec app php artisan migrate:fresh --seed
 ```
 
+10. Run the following docker command to run migrations and seeders within the app container
+
+```docker
+docker-compose exec app php artisan migrate:fresh --seed
+```
 
 ## Running Tests
 
