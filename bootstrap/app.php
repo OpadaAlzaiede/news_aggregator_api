@@ -5,7 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -28,5 +30,12 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => config('messages.errors.'.$e->getStatusCode())
             ], $e->getStatusCode());
+        });
+
+        $exceptions->render(function(Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                'message' => 'server error.'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
