@@ -14,8 +14,9 @@ class NYTimesApi extends GenericNewsApi  {
     public function fetchArticles(?string $keyword, ?Carbon $syncFrom) {
 
         $apiKey = config('news_sources.NYTimes.api_key');
+        $endpoint = config('news_sources.NYTimes.endpoint');
 
-        $this->getArticles(endpoint: config('news_sources.NYTimes.endpoint'),
+        $this->getArticles(endpoint: $endpoint,
         params: [
             'api-key' => $apiKey
         ]);

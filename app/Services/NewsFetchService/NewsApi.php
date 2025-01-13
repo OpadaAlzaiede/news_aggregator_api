@@ -14,8 +14,9 @@ class NewsApi extends GenericNewsApi  {
     public function fetchArticles(?string $keyword, ?Carbon $syncFrom) {
 
         $apiKey = config('news_sources.NewsAPI.api_key');
+        $endpoint = config('news_sources.NewsAPI.endpoint');
 
-        $this->getArticles(endpoint: config('news_sources.NewsAPI.api_key'),
+        $this->getArticles(endpoint: $endpoint,
             params: [
                 'from' => $syncFrom,
                 'sortBy' => 'publishedAt',

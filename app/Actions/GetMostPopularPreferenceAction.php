@@ -14,19 +14,19 @@ class GetMostPopularPreferenceAction {
      *
      * @param Carbon $from
      *
-     * @return string
+     * @return ?string
      */
-    public function handle(Carbon $from) {
+    public function handle(Carbon $from): ?string {
 
         $selectPreferenceFor = collect(PreferenceForEnum::cases())->shuffle()->first()?->value;
 
-        $result = UserPreference::select('preference_value', DB::raw('COUNT(*) as frequency'))
+        $mostPopularPreference = UserPreference::select(['preference_value', DB::raw('COUNT(*) as frequency')])
                         ->where('preference_type', $selectPreferenceFor)
                         ->where('created_at', '>=', $from)
                         ->groupBy('preference_value')
                         ->orderByDesc('frequency')
                         ->first();
 
-        return $result?->preference_value;
+        return $mostPopularPreference?->preference_value;
     }
 }

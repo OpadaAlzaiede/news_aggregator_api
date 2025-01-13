@@ -13,7 +13,9 @@ class BBCApi extends GenericNewsApi {
      */
     public function fetchArticles(?string $keyword, ?Carbon $syncFrom) {
 
-        $this->getArticles(endpoint: config('news_sources.BBC.endpoint'), params: ['lang' => 'english']);
+        $endpoint = config('news_sources.BBC.endpoint');
+
+        $this->getArticles(endpoint: $endpoint, params: ['lang' => 'english']);
     }
 
     /**
