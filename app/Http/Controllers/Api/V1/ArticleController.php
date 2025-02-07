@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Articles\IndexResource;
 use App\Http\Resources\V1\Articles\ShowResource;
 use App\Models\Article;
+use App\Services\ArticlesService;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -15,7 +16,7 @@ class ArticleController extends Controller
 {
     use Pagination;
 
-    public function __construct(Request $request)
+    public function __construct(protected ArticlesService $articlesService, Request $request)
     {
 
         $this->setPaginationParams($request);
@@ -131,39 +132,17 @@ class ArticleController extends Controller
      *      )
      * )
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
 
-        $query = Article::query()
-            ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at']);
-
-        $query->when(request('keyword'), function ($query, $keyword) {
-            $query->where(function ($query) use ($keyword) {
-                $query->whereFullText(
-                    ['title', 'description', 'content'],
-                    $keyword,
-                    ['mode' => 'boolean']
-                );
-            });
-        });
-
-        $query->when(! request('keyword'), function ($query) {
-            $query->when(request('published_at'), function ($query, $date) {
-                $query->whereDate('published_at', $date);
-            });
-
-            $query->when(request('category'), function ($query, $category) {
-                $query->where('category', 'LIKE', $category.'%');
-            });
-
-            $query->when(request('source'), function ($query, $source) {
-                $query->where('source', 'LIKE', $source.'%');
-            });
-
-            $query->latest('id');
-        });
-
-        $articles = $query->simplePaginate($this->perPage, ['*'], 'page', $this->page);
+        $articles = $this->articlesService->getArticles(
+            $this->perPage,
+            $this->page,
+            $request->string('keyword'),
+            $request->date('published_at'),
+            $request->string('category'),
+            $request->string('source')
+        );
 
         return IndexResource::collection($articles);
     }

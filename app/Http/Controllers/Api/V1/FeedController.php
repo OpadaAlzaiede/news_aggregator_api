@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Articles\IndexResource;
+use App\Services\FeedService;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
     use Pagination;
 
-    public function __construct(Request $request)
+    public function __construct(protected FeedService $feedService, Request $request)
     {
 
         $this->setPaginationParams($request);
@@ -90,9 +90,7 @@ class FeedController extends Controller
     public function index(): AnonymousResourceCollection
     {
 
-        $feed = Auth::user()->feed()
-            ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at'])
-            ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
+        $feed = $this->feedService->getFeed($this->perPage, $this->page);
 
         return IndexResource::collection($feed);
     }
