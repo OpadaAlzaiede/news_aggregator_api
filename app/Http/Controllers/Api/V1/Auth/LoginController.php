@@ -67,7 +67,7 @@ class LoginController extends Controller
      *      )
      * )
      */
-    public function login(LoginRequest $request): JsonResponse {
+    public function __invoke(LoginRequest $request): JsonResponse {
 
         $credentials = $request->validated();
 
@@ -90,35 +90,5 @@ class LoginController extends Controller
             message: config('messages.auth.login_success'),
             code: Response::HTTP_OK
         );
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    /**
-     * @OA\Post(
-     *     path="/api/v1/logout",
-     *     summary="user logout",
-     *     tags={"auth"},
-     *    security={ {"sanctum": {} }},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Logout success",
-     *         @OA\JsonContent(
-     *             @OA\Examples(
-     *                  example="result",
-     *                  value={"message": "You have logged out successfully."},
-     *                  summary="An result object."
-     *             ),
-     *          )
-     *      )
-     * )
-     */
-    public function logout() {
-
-        $user = Auth::user();
-        $user->tokens()->delete();
-
-        return $this->success(data: [], message: config('messages.auth.logout_success'), code: Response::HTTP_OK);
     }
 }

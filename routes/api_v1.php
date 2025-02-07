@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Middleware\VerifiedEmailMiddleware;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
@@ -16,7 +17,7 @@ Route::middleware(RequireJsonMiddleware::class)->group(function() {
 
     /* Auth Routes */
     Route::post('register', RegistrationController::class)->name('auth.register');
-    Route::post('login', [LoginController::class, 'login'])->name('auth.login')->middleware(VerifiedEmailMiddleware::class);
+    Route::post('login', LoginController::class)->name('auth.login')->middleware(VerifiedEmailMiddleware::class);
 
     Route::post('forgot-password', [PasswordResetController::class, 'sendLink'])->name('auth.forgot-password')->middleware('throttle:1,60');
     Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('auth.reset-password');
@@ -40,7 +41,7 @@ Route::middleware(RequireJsonMiddleware::class)->group(function() {
 
         Route::get('feed', FeedController::class)->name('feed.index')->middleware(UserHasPreferencesMiddleware::class);
 
-        Route::post('logout', [LoginController::class, 'logout'])->name('auth.logout');
+        Route::post('logout', LogoutController::class)->name('auth.logout');
     });
 
 });
