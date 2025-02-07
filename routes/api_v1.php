@@ -39,7 +39,7 @@ Route::middleware(RequireJsonMiddleware::class)->group(function() {
         Route::post('preferences', [UserPreferenceController::class, 'store'])->name('preferences.store')->middleware('throttle:10,1');
         Route::delete('preferences', [UserPreferenceController::class, 'destroy'])->name('preferences.destroy');
 
-        Route::get('feed', FeedController::class)->name('feed.index')->middleware(UserHasPreferencesMiddleware::class);
+        Route::get('feed', [FeedController::class, 'index'])->name('feed.index')->middleware(UserHasPreferencesMiddleware::class);
 
         Route::post('logout', LogoutController::class)->name('auth.logout');
     });

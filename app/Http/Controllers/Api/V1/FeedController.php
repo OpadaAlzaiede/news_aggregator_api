@@ -79,7 +79,7 @@ class FeedController extends Controller
      *      )
      * )
      */
-    public function __invoke(): AnonymousResourceCollection {
+    public function index(): AnonymousResourceCollection {
 
         $feed = Auth::user()->feed()
                     ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at'])
