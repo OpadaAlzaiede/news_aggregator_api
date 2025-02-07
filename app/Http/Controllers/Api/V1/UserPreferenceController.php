@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPreferenceRequest;
+use App\Http\Resources\V1\UserPreferenceResource;
 use App\Services\UserPreferencesService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserPreferenceController extends Controller
@@ -42,8 +45,14 @@ class UserPreferenceController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
+        $user = Auth::user();
 
-        return $this->userPreferencesService->index();
+        $preferences = Cache::rememberForever('user_preferences'.$user->id, function () {
+
+            return $this->userPreferencesService->getPreferences();
+        });
+
+        return UserPreferenceResource::collection($preferences);
     }
 
     /**

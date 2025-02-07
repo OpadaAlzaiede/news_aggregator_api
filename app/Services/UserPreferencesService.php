@@ -3,33 +3,25 @@
 namespace App\Services;
 
 use App\Enums\HasPreferencesEnum;
-use App\Http\Resources\V1\UserPreferenceResource;
 use App\Jobs\SyncUserFeedJob;
 use App\Models\UserPreference;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class UserPreferencesService
 {
-    public function index(): AnonymousResourceCollection
+    public function getPreferences(): Collection
     {
 
-        $user = Auth::user();
-
-        $preferences = Cache::rememberForever('user_preferences'.$user->id, function () {
-
-            return UserPreference::query()
-                ->select(['preference_type', 'preference_value'])
-                ->where('user_id', Auth::id())
-                ->when(request('preference_type'), function ($query, $preference_type) {
-                    $query->where('preference_type', $preference_type);
-                })
-                ->get();
-        });
-
-        return UserPreferenceResource::collection($preferences);
+        return UserPreference::query()
+            ->select(['preference_type', 'preference_value'])
+            ->where('user_id', Auth::id())
+            ->when(request('preference_type'), function ($query, $preference_type) {
+                $query->where('preference_type', $preference_type);
+            })
+            ->get();
     }
 
     public function store(array $preferences): void
