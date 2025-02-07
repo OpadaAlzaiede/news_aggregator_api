@@ -30,8 +30,8 @@ class SyncUsersFeedCommand extends Command
     {
         User::query()
             ->where('has_preferences', HasPreferencesEnum::YES->value)
-            ->chunk(100, function($users) {
-                foreach($users as $user) {
+            ->chunk(100, function ($users) {
+                foreach ($users as $user) {
 
                     SyncUserFeedJob::dispatch($user);
                 }

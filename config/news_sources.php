@@ -7,13 +7,13 @@ return [
     'retry_within' => 100,
     'NewsAPI' => [
         'endpoint' => 'https://newsapi.org/v2/everything',
-        'api_key' => env('NEWS_API_KEY')
+        'api_key' => env('NEWS_API_KEY'),
     ],
     'BBC' => [
-        'endpoint' => 'https://bbc-api.vercel.app/latest'
+        'endpoint' => 'https://bbc-api.vercel.app/latest',
     ],
     'NYTimes' => [
         'endpoint' => 'https://api.nytimes.com/svc/news/v3/content/all/all.json',
-        'api_key' => env('NYT_API_KEY')
-    ]
+        'api_key' => env('NYT_API_KEY'),
+    ],
 ];

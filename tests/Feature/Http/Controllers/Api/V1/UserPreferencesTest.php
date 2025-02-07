@@ -2,19 +2,20 @@
 
 namespace Tests\Feature\Http\Controllers\Api\V1;
 
-use App\Models\User;
-use App\Jobs\SyncUserFeedJob;
 use App\Enums\PreferenceForEnum;
+use App\Jobs\SyncUserFeedJob;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\Feature\Http\Controllers\Api\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserPreferencesTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_set_preferences(): void {
+    public function test_user_can_set_preferences(): void
+    {
 
         $user = User::factory()->create();
         $preferences = $this->createPreferences(5);
@@ -29,7 +30,8 @@ class UserPreferencesTest extends TestCase
 
     }
 
-    public function test_user_cannot_set_more_than_ten_preferences(): void {
+    public function test_user_cannot_set_more_than_ten_preferences(): void
+    {
 
         $user = User::factory()->create();
         $preferences = $this->createPreferences(11);
@@ -43,7 +45,8 @@ class UserPreferencesTest extends TestCase
         Queue::assertNotPushed(SyncUserFeedJob::class);
     }
 
-    public function test_user_cannot_set_duplicate_preferences(): void {
+    public function test_user_cannot_set_duplicate_preferences(): void
+    {
 
         $user = User::factory()->create();
         $preferences = $this->createPreferences(5, true);
@@ -57,8 +60,8 @@ class UserPreferencesTest extends TestCase
         Queue::assertNotPushed(SyncUserFeedJob::class);
     }
 
-
-    public function test_user_can_access_his_preferences(): void {
+    public function test_user_can_access_his_preferences(): void
+    {
 
         $user = User::factory()->create();
         $preferences = $this->createPreferences(5);
@@ -71,7 +74,8 @@ class UserPreferencesTest extends TestCase
         $this->assertCount(5, $response->json('data'));
     }
 
-    public function test_user_can_destroy_his_preferences(): void {
+    public function test_user_can_destroy_his_preferences(): void
+    {
 
         $user = User::factory()->create();
         $preferences = $this->createPreferences(5);
@@ -87,23 +91,21 @@ class UserPreferencesTest extends TestCase
 
     /**
      * Create random preferences array
-     *
-     * @param int $count
-     * @param bool $withDuplicates
      */
-    private function createPreferences(int $count = 5, bool $withDuplicates = false) {
+    private function createPreferences(int $count = 5, bool $withDuplicates = false)
+    {
 
         $preferences = [];
 
-        for($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
 
             $preferences[] = [
                 'preference_type' => collect(PreferenceForEnum::cases())->shuffle()->first()?->value,
-                'preference_value' => fake()->unique()->text(10)
+                'preference_value' => fake()->unique()->text(10),
             ];
         }
 
-        if($withDuplicates) {
+        if ($withDuplicates) {
 
             $preferences[] = $preferences[0];
         }

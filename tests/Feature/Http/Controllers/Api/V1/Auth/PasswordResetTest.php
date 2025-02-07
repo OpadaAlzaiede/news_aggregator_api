@@ -2,34 +2,36 @@
 
 namespace Tests\Feature\Http\Controllers\Api\V1\Auth;
 
-use App\Models\User;
 use App\Models\PasswordResetToken;
+use App\Models\User;
+use App\Notifications\CustomPasswordResetNotification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\Feature\Http\Controllers\Api\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Notifications\CustomPasswordResetNotification;
 
 class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_request_password_reset_link(): void {
+    public function test_user_can_request_password_reset_link(): void
+    {
 
         $user = User::factory()->create();
 
         Notification::fake();
 
         $this->actingAs($user)->post(route('auth.forgot-password'), [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         Notification::assertSentTo($user, CustomPasswordResetNotification::class);
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_can_reset_password_with_valid_email_token_and_password(): void {
+    public function test_user_can_reset_password_with_valid_email_token_and_password(): void
+    {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
@@ -47,13 +49,14 @@ class PasswordResetTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'data',
-            'message'
+            'message',
         ]);
         $this->assertTrue(Hash::check($newPassword, $user->password));
         $this->assertDatabaseMissing('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_token(): void {
+    public function test_user_cannot_reset_password_with_invalid_token(): void
+    {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
@@ -70,20 +73,21 @@ class PasswordResetTest extends TestCase
 
         $response->assertJsonStructure([
             'errors' => [
-                'token'
-            ]
+                'token',
+            ],
         ]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertFalse(Hash::check($newPassword, $user->password));
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_cannot_reset_password_with_expired_token(): void {
+    public function test_user_cannot_reset_password_with_expired_token(): void
+    {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create([
             'email' => $user->email,
-            'created_at' => now()->subHour()
+            'created_at' => now()->subHour(),
         ]);
         $newPassword = '9RQs67DF@#';
 
@@ -98,15 +102,16 @@ class PasswordResetTest extends TestCase
 
         $response->assertJsonStructure([
             'errors' => [
-                'token'
-            ]
+                'token',
+            ],
         ]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertFalse(Hash::check($newPassword, $user->password));
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_email(): void {
+    public function test_user_cannot_reset_password_with_invalid_email(): void
+    {
 
         $firstUser = User::factory()->create();
         $secondUser = User::factory()->create();
@@ -125,15 +130,16 @@ class PasswordResetTest extends TestCase
 
         $response->assertJsonStructure([
             'errors' => [
-                'email'
-            ]
+                'email',
+            ],
         ]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertFalse(Hash::check($newPassword, $firstUser->password));
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $firstUser->email]);
     }
 
-    public function test_user_cannot_reset_password_with_invalid_password(): void {
+    public function test_user_cannot_reset_password_with_invalid_password(): void
+    {
 
         $user = User::factory()->create();
         $passwordResetToken = PasswordResetToken::factory()->create(['email' => $user->email]);
@@ -150,8 +156,8 @@ class PasswordResetTest extends TestCase
 
         $response->assertJsonStructure([
             'errors' => [
-                'password'
-            ]
+                'password',
+            ],
         ]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertFalse(Hash::check($newPassword, $user->password));

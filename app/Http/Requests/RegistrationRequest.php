@@ -5,11 +5,11 @@ namespace App\Http\Requests;
 use App\Traits\JsonErrors;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 
 class RegistrationRequest extends FormRequest
 {
     use JsonErrors;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -32,8 +32,8 @@ class RegistrationRequest extends FormRequest
                 'required',
                 'min:8',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-                'confirmed'
-            ]
+                'confirmed',
+            ],
         ];
     }
 
@@ -42,10 +42,11 @@ class RegistrationRequest extends FormRequest
      *
      * @return array
      */
-    public function messages() {
+    public function messages()
+    {
 
         return [
-            'email.unique' => 'Please select different email.'
+            'email.unique' => 'Please select different email.',
         ];
     }
 }

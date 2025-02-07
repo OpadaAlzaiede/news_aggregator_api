@@ -1,11 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-use function Laravel\Prompts\table;
 
 return new class extends Migration
 {
@@ -33,7 +31,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        if(! app()->runningUnitTests()) { /* Sqlite doesn't support full text index. */
+        if (! app()->runningUnitTests()) { /* Sqlite doesn't support full text index. */
 
             DB::statement('ALTER TABLE articles ADD FULLTEXT title_description_content_fulltext_idx(title, description, content)');
         }

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Actions\GetMostPopularPreferenceAction;
 use App\Services\NewsFetchService\Abstracts\NewsFetchContract;
+use Illuminate\Console\Command;
 
 class SyncNewsApiArticlesCommand extends Command
 {

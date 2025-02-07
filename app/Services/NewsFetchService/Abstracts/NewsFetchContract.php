@@ -4,11 +4,7 @@ namespace App\Services\NewsFetchService\Abstracts;
 
 use Carbon\Carbon;
 
-interface NewsFetchContract {
-
-    /**
-     * @param ?string $keyword
-     * @param ?Carbon $syncFrom
-     */
+interface NewsFetchContract
+{
     public function fetchArticles(?string $keyword, ?Carbon $syncFrom);
 }

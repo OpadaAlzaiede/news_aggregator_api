@@ -21,7 +21,7 @@ class IndexResource extends JsonResource
             'author' => $this->author,
             'category' => $this->category,
             'source' => $this->source,
-            'published_at' => $this->published_at
+            'published_at' => $this->published_at,
         ];
     }
 }

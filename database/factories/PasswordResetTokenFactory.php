@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PasswordResetToken>
@@ -20,7 +20,7 @@ class PasswordResetTokenFactory extends Factory
         return [
             'email' => fake()->email(),
             'token' => Str::random(60),
-            'created_at' => now()
+            'created_at' => now(),
         ];
     }
 }

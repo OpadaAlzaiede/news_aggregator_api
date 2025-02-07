@@ -2,30 +2,28 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use Illuminate\Http\JsonResponse;
-use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LoginRequest;
 use App\Http\Resources\V1\AuthResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
-
-    /**
-     * @param LoginRequest $request
-     *
-     * @return JsonResponse
-     */
     /**
      * @OA\Post(
      *     path="/api/v1/login",
      *     summary="user login",
      *     tags={"auth"},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="email"
@@ -41,10 +39,13 @@ class LoginController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Login success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -54,10 +55,13 @@ class LoginController extends Controller
      *              ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="failed login",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"message": "The provided credentials don't match our records."},
@@ -67,11 +71,12 @@ class LoginController extends Controller
      *      )
      * )
      */
-    public function __invoke(LoginRequest $request): JsonResponse {
+    public function __invoke(LoginRequest $request): JsonResponse
+    {
 
         $credentials = $request->validated();
 
-        if(! Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+        if (! Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
 
             return $this->error(
                 message: config('messages.auth.invalid_credentials'),
@@ -85,7 +90,7 @@ class LoginController extends Controller
         return $this->success(
             data: [
                 'user' => AuthResource::make($user),
-                'token' => $token
+                'token' => $token,
             ],
             message: config('messages.auth.login_success'),
             code: Response::HTTP_OK

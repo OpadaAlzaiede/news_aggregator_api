@@ -17,10 +17,13 @@ class LogoutController extends Controller
      *     summary="user logout",
      *     tags={"auth"},
      *    security={ {"sanctum": {} }},
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Logout success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"message": "You have logged out successfully."},

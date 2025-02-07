@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\V1\AuthResource;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\EmailVerificationRequest;
+use App\Http\Resources\V1\AuthResource;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class VerifyEmailController extends Controller
 {
     /**
      * Handle the incoming request.
-     *
-     * @param EmailVerificationRequest $request
-     *
-     * @return JsonResponse
      */
-    public function __invoke(EmailVerificationRequest $request): JsonResponse {
+    public function __invoke(EmailVerificationRequest $request): JsonResponse
+    {
 
         $user = Auth::user();
 
-        if($user->hasVerifiedEmail()) {
+        if ($user->hasVerifiedEmail()) {
 
             return $this->success(
                 data: [],
@@ -33,7 +30,7 @@ class VerifyEmailController extends Controller
             );
         }
 
-        if($user->markEmailAsVerified()) {
+        if ($user->markEmailAsVerified()) {
 
             event(new Verified($user));
         }
@@ -43,7 +40,7 @@ class VerifyEmailController extends Controller
         return $this->success(
             data: [
                 'user' => AuthResource::make($user),
-                'token' => $token
+                'token' => $token,
             ],
             message: config('messages.auth.email_verified'),
             code: Response::HTTP_OK

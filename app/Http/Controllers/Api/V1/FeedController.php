@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\Articles\IndexResource;
 use App\Traits\Pagination;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\V1\Articles\IndexResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
     use Pagination;
 
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
 
         $this->setPaginationParams($request);
     }
-
 
     /**
      * Handle the incoming request.
      *
      * @param Request
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     /**
      * @OA\Get(
@@ -32,28 +30,35 @@ class FeedController extends Controller
      *     summary="show feed",
      *     tags={"articles"},
      *     security={ {"sanctum": {} }},
+     *
      *      @OA\Parameter(
      *          name="perPage",
      *          in="query",
      *          required=false,
      *          description="number of articles per page",
+     *
      *          @OA\Schema(
      *              type="number"
      *          ),
      *     ),
+     *
      *      @OA\Parameter(
      *          name="page",
      *          in="query",
      *          required=false,
      *          description="page number",
+     *
      *          @OA\Schema(
      *              type="number"
      *          ),
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -66,10 +71,13 @@ class FeedController extends Controller
      *             ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="user doesn't have preferences.",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"message": "user doesn't have preferences."},
@@ -79,11 +87,12 @@ class FeedController extends Controller
      *      )
      * )
      */
-    public function index(): AnonymousResourceCollection {
+    public function index(): AnonymousResourceCollection
+    {
 
         $feed = Auth::user()->feed()
-                    ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at'])
-                    ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
+            ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at'])
+            ->simplePaginate($this->perPage, ['*'], 'page', $this->page);
 
         return IndexResource::collection($feed);
     }

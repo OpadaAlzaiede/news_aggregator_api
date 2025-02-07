@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use App\Actions\SyncUserFeedAction;
 use App\Models\User;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 class SyncUserFeedJob implements ShouldQueue
 {
@@ -21,8 +21,6 @@ class SyncUserFeedJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @param SyncUserFeedAction $syncUserFeedAction
      */
     public function handle(SyncUserFeedAction $syncUserFeedAction): void
     {

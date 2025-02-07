@@ -154,7 +154,6 @@ return [
     */
     'reset_password_token_lifetime' => 60,
 
-
     /*
     |--------------------------------------------------------------------------
     | Pagination default settings
@@ -165,6 +164,6 @@ return [
     */
     'pagination' => [
         'per_page' => 10,
-        'page' => 1
-    ]
+        'page' => 1,
+    ],
 ];

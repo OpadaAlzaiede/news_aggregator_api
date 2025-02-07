@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Article;
-use App\Traits\Pagination;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Articles\IndexResource;
 use App\Http\Resources\V1\Articles\ShowResource;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Article;
+use App\Traits\Pagination;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticleController extends Controller
 {
     use Pagination;
 
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
 
         $this->setPaginationParams($request);
     }
 
     /**
      * Return a list of articles
-     *
-     * @return AnonymousResourceCollection
      */
     /**
      * @OA\Get(
@@ -31,64 +30,79 @@ class ArticleController extends Controller
      *     summary="articles resource",
      *     tags={"articles"},
      *     security={ {"sanctum": {} }},
+     *
      *      @OA\Parameter(
      *          name="keyword",
      *          in="query",
      *          required=false,
      *          description="Global search keyword",
+     *
      *          @OA\Schema(
      *              type="string"
      *          ),
      *     ),
+     *
      *     @OA\Parameter(
      *          name="published_at",
      *          in="query",
      *          required=false,
      *          description="The publish date of the article",
+     *
      *          @OA\Schema(
      *              type="date"
      *          ),
      *     ),
+     *
      *      @OA\Parameter(
      *          name="category",
      *          in="query",
      *          required=false,
      *          description="The category of the article",
+     *
      *          @OA\Schema(
      *              type="string"
      *          ),
      *     ),
+     *
      *      @OA\Parameter(
      *          name="source",
      *          in="query",
      *          required=false,
      *          description="The source of the article",
+     *
      *          @OA\Schema(
      *              type="string"
      *          ),
      *     ),
+     *
      *      @OA\Parameter(
      *          name="perPage",
      *          in="query",
      *          required=false,
      *          description="number of articles per page",
+     *
      *          @OA\Schema(
      *              type="number"
      *          ),
      *     ),
+     *
      *      @OA\Parameter(
      *          name="page",
      *          in="query",
      *          required=false,
      *          description="page number",
+     *
      *          @OA\Schema(
      *              type="number"
      *          ),
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -101,10 +115,13 @@ class ArticleController extends Controller
      *              ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="unauthenticated",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"message": "unauthenticated."},
@@ -114,10 +131,11 @@ class ArticleController extends Controller
      *      )
      * )
      */
-    public function index(): AnonymousResourceCollection {
+    public function index(): AnonymousResourceCollection
+    {
 
         $query = Article::query()
-                        ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at']);
+            ->select(['title', 'slug', 'description', 'category', 'author', 'source', 'published_at']);
 
         $query->when(request('keyword'), function ($query, $keyword) {
             $query->where(function ($query) use ($keyword) {
@@ -129,17 +147,17 @@ class ArticleController extends Controller
             });
         });
 
-        $query->when(!request('keyword'), function ($query) {
+        $query->when(! request('keyword'), function ($query) {
             $query->when(request('published_at'), function ($query, $date) {
                 $query->whereDate('published_at', $date);
             });
 
             $query->when(request('category'), function ($query, $category) {
-                $query->where('category', 'LIKE', $category . '%');
+                $query->where('category', 'LIKE', $category.'%');
             });
 
             $query->when(request('source'), function ($query, $source) {
-                $query->where('source', 'LIKE', $source . '%');
+                $query->where('source', 'LIKE', $source.'%');
             });
 
             $query->latest('id');
@@ -150,12 +168,6 @@ class ArticleController extends Controller
         return IndexResource::collection($articles);
     }
 
-
-    /**
-     * @param Article $article
-     *
-     * @return JsonResource
-     */
     /**
      * Return a list of articles
      *
@@ -167,19 +179,24 @@ class ArticleController extends Controller
      *     summary="show article",
      *     tags={"articles"},
      *     security={ {"sanctum": {} }},
+     *
      *      @OA\Parameter(
      *          name="article",
      *          in="path",
      *          required=false,
      *          description="article slug",
+     *
      *          @OA\Schema(
      *              type="string"
      *          ),
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"slug": "totam", "title": "Totam", "description": "Vel quos occaecati", "content": "Iure et vero facere ",
@@ -188,10 +205,13 @@ class ArticleController extends Controller
      *             ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=404,
      *         description="record not found",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"message": "record not found."},
@@ -201,7 +221,8 @@ class ArticleController extends Controller
      *      )
      * )
      */
-    public function show(Article $article): JsonResource {
+    public function show(Article $article): JsonResource
+    {
 
         return ShowResource::make($article);
     }

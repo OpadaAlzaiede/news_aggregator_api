@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
             'category' => fake()->text(10),
             'author' => fake()->name(),
             'source' => fake()->text(10),
-            'published_at' => fake()->date()
+            'published_at' => fake()->date(),
         ];
     }
 }

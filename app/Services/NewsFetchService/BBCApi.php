@@ -2,16 +2,13 @@
 
 namespace App\Services\NewsFetchService;
 
-use Carbon\Carbon;
 use App\Services\NewsFetchService\Abstracts\GenericNewsApi;
+use Carbon\Carbon;
 
-class BBCApi extends GenericNewsApi {
-
-    /**
-     * @param ?string $keyword
-     * @param ?Carbon $syncFrom
-     */
-    public function fetchArticles(?string $keyword, ?Carbon $syncFrom) {
+class BBCApi extends GenericNewsApi
+{
+    public function fetchArticles(?string $keyword, ?Carbon $syncFrom)
+    {
 
         $endpoint = config('news_sources.BBC.endpoint');
 
@@ -20,10 +17,9 @@ class BBCApi extends GenericNewsApi {
 
     /**
      *  Get mapping between each service and the article resource
-     *
-     * @return array
      */
-    protected function getMappings(): array {
+    protected function getMappings(): array
+    {
 
         return [
             'title' => 'title',
@@ -34,10 +30,9 @@ class BBCApi extends GenericNewsApi {
 
     /**
      * Get the key that represents the articles within the response
-     *
-     * @return string
      */
-    protected function getResponseArticlesKey(): string {
+    protected function getResponseArticlesKey(): string
+    {
 
         return 'Latest';
     }

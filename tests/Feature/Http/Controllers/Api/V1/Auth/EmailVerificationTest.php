@@ -3,17 +3,18 @@
 namespace Tests\Feature\Http\Controllers\Api\V1\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Event;
-use Tests\Feature\Http\Controllers\Api\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
+use Tests\Feature\Http\Controllers\Api\TestCase;
 
 class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_email_can_be_verified(): void {
+    public function test_email_can_be_verified(): void
+    {
 
         $user = User::factory()->create([
             'email_verified_at' => null,
@@ -34,7 +35,8 @@ class EmailVerificationTest extends TestCase
         $this->assertArrayHasKey('token', $response->json('data'));
     }
 
-    public function test_email_is_not_verified_with_invalid_hash(): void {
+    public function test_email_is_not_verified_with_invalid_hash(): void
+    {
 
         $user = User::factory()->create([
             'email_verified_at' => null,

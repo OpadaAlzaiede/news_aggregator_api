@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,8 @@ class EmailVerificationRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
 
         $this->validateUser();
 
@@ -46,10 +47,9 @@ class EmailVerificationRequest extends FormRequest
      * This method tries log the user in using the Id
      *
      * @throws AuthorizationException
-     *
-     * @return null |JsonResponse
      */
-    public function validateUser(): null |JsonResponse {
+    public function validateUser(): ?JsonResponse
+    {
 
         auth()->loginUsingId(User::findOrFail($this->route('id'))->id);
 
@@ -57,9 +57,9 @@ class EmailVerificationRequest extends FormRequest
             if ($this->route('id') != $this->user()->getKey()) {
                 throw new AuthorizationException;
             }
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             return response()->json([
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
 

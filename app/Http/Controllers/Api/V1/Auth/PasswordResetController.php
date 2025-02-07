@@ -2,34 +2,36 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\JsonResponse;
-use App\Models\PasswordResetToken;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\PasswordUpdateRequest;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\PasswordResetToken;
+use App\Models\User;
 use App\Notifications\CustomPasswordResetNotification;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class PasswordResetController extends Controller
 {
     /**
-     * @param PasswordResetRequest $request
-     *
-     * @return JsonResponse
+     * @param  PasswordResetRequest  $request
      */
     /**
      * @OA\Post(
      *     path="/api/v1/forgot-password",
      *     summary="user reset password",
      *     tags={"auth"},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="email"
@@ -40,10 +42,13 @@ class PasswordResetController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Link sent successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -52,10 +57,13 @@ class PasswordResetController extends Controller
      *              ),
      *         )
      *     ),
+     *
      *      @OA\Response(
      *         response=429,
      *         description="Too many attempts",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -66,7 +74,8 @@ class PasswordResetController extends Controller
      *     ),
      * )
      */
-    public function sendLink(ForgotPasswordRequest $request): JsonResponse {
+    public function sendLink(ForgotPasswordRequest $request): JsonResponse
+    {
 
         $user = User::where('email', $request->validated('email'))->first();
         $token = Str::random(config('app.reset_password_token_length'));
@@ -74,7 +83,7 @@ class PasswordResetController extends Controller
         PasswordResetToken::create([
             'email' => $user->email,
             'token' => $token,
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $user->notify(new CustomPasswordResetNotification($token));
@@ -87,19 +96,21 @@ class PasswordResetController extends Controller
     }
 
     /**
-     * @param PasswordUpdateRequest $request
-     *
-     * @return JsonResponse
+     * @param  PasswordUpdateRequest  $request
      */
     /**
      * @OA\Post(
      *     path="/api/v1/reset-password",
      *     summary="user reset password",
      *     tags={"auth"},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="email"
@@ -118,10 +129,13 @@ class PasswordResetController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Password updated successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -130,10 +144,13 @@ class PasswordResetController extends Controller
      *              ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result-1",
      *                  value={"success": false, "data": null, "errors": {"token": {"Reset link is invalid or has expired."}}},
@@ -148,7 +165,8 @@ class PasswordResetController extends Controller
      *      ),
      * )
      */
-    public function reset(PasswordResetRequest $request): JsonResponse {
+    public function reset(PasswordResetRequest $request): JsonResponse
+    {
 
         $user = User::where('email', $request->validated('email'))->first();
 

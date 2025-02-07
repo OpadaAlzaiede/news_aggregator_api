@@ -1,19 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\FeedController;
-use App\Http\Middleware\VerifiedEmailMiddleware;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
-use App\Http\Controllers\Api\V1\UserPreferenceController;
-use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
-use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
+use App\Http\Controllers\Api\V1\Auth\RegistrationController;
+use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
+use App\Http\Controllers\Api\V1\FeedController;
+use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Middleware\RequireJsonMiddleware;
 use App\Http\Middleware\UserHasPreferencesMiddleware;
+use App\Http\Middleware\VerifiedEmailMiddleware;
+use Illuminate\Support\Facades\Route;
 
-Route::middleware(RequireJsonMiddleware::class)->group(function() {
+Route::middleware(RequireJsonMiddleware::class)->group(function () {
 
     /* Auth Routes */
     Route::post('register', RegistrationController::class)->name('auth.register');
@@ -27,8 +27,7 @@ Route::middleware(RequireJsonMiddleware::class)->group(function() {
         ->withoutMiddleware(RequireJsonMiddleware::class)
         ->name('verification.verify');
 
-
-    Route::middleware('auth:sanctum')->group(function() {
+    Route::middleware('auth:sanctum')->group(function () {
 
         /* Article Routes */
         Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');

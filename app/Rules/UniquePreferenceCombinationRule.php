@@ -18,7 +18,7 @@ class UniquePreferenceCombinationRule implements ValidationRule
             return $item['preference_type'].$item['preference_value'];
         });
 
-        if(count($uniqueCombinations) !== count($value)) {
+        if (count($uniqueCombinations) !== count($value)) {
 
             $fail('Duplicate preferences are not allowed.');
         }

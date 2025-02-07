@@ -3,18 +3,14 @@
 namespace App\Services\NewsFetchService\Abstracts;
 
 use App\Models\Article;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
-abstract class GenericNewsApi implements NewsFetchContract {
-
-
-    /**
-     * @param $endpoint
-     * @param array $params
-     */
-    protected function getArticles(string $endpoint, array $params) {
+abstract class GenericNewsApi implements NewsFetchContract
+{
+    protected function getArticles(string $endpoint, array $params)
+    {
 
         $timeOut = config('news_sources.time_out');
         $retryTimes = config('news_sources.retry_times');
@@ -23,31 +19,30 @@ abstract class GenericNewsApi implements NewsFetchContract {
         try {
 
             $response = Http::timeout($timeOut)
-                            ->retry($retryTimes, $retryWithin)
-                            ->get($endpoint, $params);
+                ->retry($retryTimes, $retryWithin)
+                ->get($endpoint, $params);
 
-            if($response->ok()) {
+            if ($response->ok()) {
 
                 $this->createArticles(articles: $response->json($this->getResponseArticlesKey()));
 
-                Log::channel('sync_success')->info("syncing news from ".$endpoint);
-            }else {
+                Log::channel('sync_success')->info('syncing news from '.$endpoint);
+            } else {
 
-                Log::channel('sync_failure')->error("syncing news from ".$endpoint, ['response' => $response]);
+                Log::channel('sync_failure')->error('syncing news from '.$endpoint, ['response' => $response]);
             }
 
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
 
-            Log::channel('sync_failure')->error("syncing news from ".$endpoint, ['exception' => $e->getMessage()]);
+            Log::channel('sync_failure')->error('syncing news from '.$endpoint, ['exception' => $e->getMessage()]);
         }
     }
 
     /**
-     * @param array $articles
-     * @param array $mappings
-     *
+     * @param  array  $mappings
      */
-    public function createArticles(array $articles) {
+    public function createArticles(array $articles)
+    {
 
         $articlesArray = [];
 
@@ -68,21 +63,17 @@ abstract class GenericNewsApi implements NewsFetchContract {
         $this->storeArticles(articlesArray: $articlesArray);
     }
 
-    /**
-     * @param array $articlesArray
-     */
-    public function storeArticles(array $articlesArray) {
+    public function storeArticles(array $articlesArray)
+    {
 
         Article::insert($articlesArray);
     }
 
     /**
-     * @param array $array
-     * @param string $keys
-     *
      * @return $array
      */
-    private function getValueFromNestedKey(array $array, string $keys) {
+    private function getValueFromNestedKey(array $array, string $keys)
+    {
 
         $keys = explode('.', $keys);
 
@@ -102,15 +93,11 @@ abstract class GenericNewsApi implements NewsFetchContract {
 
     /**
      *  Get mapping between each service and the article resource
-     *
-     * @return array
      */
     abstract protected function getMappings(): array;
 
     /**
      * Get the key that represents the articles within the response
-     *
-     * @return string
      */
     abstract protected function getResponseArticlesKey(): string;
 }

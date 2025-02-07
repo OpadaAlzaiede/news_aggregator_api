@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 class ForgotPasswordRequest extends FormRequest
 {
     use JsonErrors;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -25,7 +26,7 @@ class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', Rule::exists('users')]
+            'email' => ['required', 'email', Rule::exists('users')],
         ];
     }
 }

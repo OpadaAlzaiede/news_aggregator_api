@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\V1;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Enums\PreferenceForEnum;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class UserPreferenceResource extends JsonResource
 {
@@ -18,7 +18,7 @@ class UserPreferenceResource extends JsonResource
     {
         return [
             'preference_type' => Str::lower(PreferenceForEnum::tryFrom($this->preference_type)?->name),
-            'preference_value' => $this->preference_value
+            'preference_value' => $this->preference_value,
         ];
     }
 }

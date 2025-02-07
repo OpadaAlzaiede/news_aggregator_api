@@ -16,13 +16,13 @@ class UserHasPreferencesMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->hasPreferences()) {
+        if (Auth::user()->hasPreferences()) {
 
             return $next($request);
         }
 
         return response()->json([
-            'message' => config('messages.general.preferences_not_set')
+            'message' => config('messages.general.preferences_not_set'),
         ], Response::HTTP_UNAUTHORIZED);
     }
 }

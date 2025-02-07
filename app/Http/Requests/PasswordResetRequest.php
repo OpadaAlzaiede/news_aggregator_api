@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests;
 
-
-use App\Traits\JsonErrors;
 use App\Models\PasswordResetToken;
 use App\Rules\ValidResetPasswordTokenRule;
+use App\Traits\JsonErrors;
 use Illuminate\Foundation\Http\FormRequest;
-
 
 class PasswordResetRequest extends FormRequest
 {
     use JsonErrors;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -33,23 +32,23 @@ class PasswordResetRequest extends FormRequest
         return [
             'token' => [
                 'required',
-                new ValidResetPasswordTokenRule($passwordResetToken)
+                new ValidResetPasswordTokenRule($passwordResetToken),
             ],
             'email' => [
                 'required',
                 'email',
-                function($attribute, $value, $fail) use($passwordResetToken) {
-                    if($passwordResetToken && $value !== $passwordResetToken->email) {
+                function ($attribute, $value, $fail) use ($passwordResetToken) {
+                    if ($passwordResetToken && $value !== $passwordResetToken->email) {
                         $fail(config('messages.auth.invalid_email'));
                     }
-                }
+                },
             ],
             'password' => [
                 'required',
                 'min:8',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-                'confirmed'
-            ]
+                'confirmed',
+            ],
         ];
     }
 }

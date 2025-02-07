@@ -19,14 +19,14 @@ class VerifiedEmailMiddleware
     {
         $user = User::where('email', $request->get('email'))->first();
 
-        if($user) {
+        if ($user) {
 
-            if(Auth::attempt(['email' => $user->email, 'password' => $request->get('password')])) {
+            if (Auth::attempt(['email' => $user->email, 'password' => $request->get('password')])) {
 
-                if(is_null($user->email_verified_at)) {
+                if (is_null($user->email_verified_at)) {
 
                     return response()->json([
-                        'message' => config('messages.auth.email_verify')
+                        'message' => config('messages.auth.email_verify'),
                     ], Response::HTTP_UNAUTHORIZED);
                 }
             }
@@ -34,8 +34,9 @@ class VerifiedEmailMiddleware
 
             return response()->json([
                 'message' => config('messages.auth.invalid_credentials'),
-            ] , Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_UNAUTHORIZED);
         }
+
         return $next($request);
     }
 }

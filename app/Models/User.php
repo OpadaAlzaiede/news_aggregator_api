@@ -15,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -26,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'has_preferences'
+        'has_preferences',
     ];
 
     /**
@@ -52,28 +52,20 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /**
-     * @return bool
-     */
-    public function hasPreferences(): bool {
+    public function hasPreferences(): bool
+    {
 
         return (bool) $this->has_preferences;
     }
 
-    /**
-     *
-     * @return HasMany
-     */
-    public function preferences(): HasMany {
+    public function preferences(): HasMany
+    {
 
         return $this->hasMany(UserPreference::class);
     }
 
-    /**
-     *
-     * @return BelongsToMany
-     */
-    public function feed(): BelongsToMany {
+    public function feed(): BelongsToMany
+    {
 
         return $this->belongsToMany(Article::class);
     }

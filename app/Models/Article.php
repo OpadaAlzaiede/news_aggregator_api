@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Article extends Model
 {
@@ -17,10 +17,11 @@ class Article extends Model
         'category',
         'source',
         'author',
-        'published_at'
+        'published_at',
     ];
 
-    public static function boot() {
+    public static function boot()
+    {
 
         parent::boot();
 
@@ -29,7 +30,8 @@ class Article extends Model
         });
     }
 
-    public function getRouteKeyName() {
+    public function getRouteKeyName()
+    {
 
         return 'slug';
     }

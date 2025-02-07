@@ -7,26 +7,24 @@ use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\V1\AuthResource;
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationController extends Controller
 {
-    /**
-     * @param RegistrationRequest $request
-     *
-     * @return JsonResponse
-     */
     /**
      * @OA\Post(
      *     path="/api/v1/register",
      *     summary="user registration",
      *     tags={"auth"},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="name",
      *                     type="string"
@@ -52,10 +50,13 @@ class RegistrationController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="Registration success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={
@@ -65,10 +66,13 @@ class RegistrationController extends Controller
      *              ),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Examples(
      *                  example="result",
      *                  value={"success": false, "data": null, "errors": {"email": {"The email field must be a valid email address."}}},
@@ -78,9 +82,10 @@ class RegistrationController extends Controller
      *      )
      * )
      */
-    public function __invoke(RegistrationRequest $request): JsonResponse {
+    public function __invoke(RegistrationRequest $request): JsonResponse
+    {
 
-        $user = User::create($request->validated()); /* The password field will be hashed automatically.*/
+        $user = User::create($request->validated()); /* The password field will be hashed automatically. */
 
         $user->notify(new VerifyEmail);
 

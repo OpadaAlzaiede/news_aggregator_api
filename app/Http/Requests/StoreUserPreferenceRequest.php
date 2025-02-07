@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Enums\PreferenceForEnum;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\UniquePreferenceCombinationRule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class StoreUserPreferenceRequest extends FormRequest
@@ -27,7 +27,7 @@ class StoreUserPreferenceRequest extends FormRequest
         return [
             'preferences' => ['array', 'required', 'min:1', 'max:10', new UniquePreferenceCombinationRule],
             'preferences.*.preference_type' => ['required', Rule::enum(PreferenceForEnum::class)],
-            'preferences.*.preference_value' => ['required']
+            'preferences.*.preference_value' => ['required'],
         ];
     }
 }

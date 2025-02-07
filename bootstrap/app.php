@@ -12,19 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
-        then: function() {
+        then: function () {
             Route::middleware('api')
                 ->prefix('api/v1')
                 ->group(base_path('routes/api_v1.php'));
         }
     )
-    ->withMiddleware(function (Middleware $middleware) {
-
-    })
+    ->withMiddleware(function (Middleware $middleware) {})
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function(ThrottleRequestsException | NotFoundHttpException $e) {
+        $exceptions->render(function (ThrottleRequestsException|NotFoundHttpException $e) {
             return response()->json([
-                'message' => config('messages.errors.'.$e->getStatusCode())
+                'message' => config('messages.errors.'.$e->getStatusCode()),
             ], $e->getStatusCode());
         });
     })->create();

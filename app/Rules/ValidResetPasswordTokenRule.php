@@ -3,17 +3,15 @@
 namespace App\Rules;
 
 use App\Models\PasswordResetToken;
-use Closure;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class ValidResetPasswordTokenRule implements ValidationRule
 {
-
     public function __construct(
         protected ?PasswordResetToken $passwordResetToken
-    )
-    {
+    ) {
         //
     }
 
@@ -26,9 +24,9 @@ class ValidResetPasswordTokenRule implements ValidationRule
     {
         $passes = true;
 
-        if(isset($this->passwordResetToken)) {
+        if (isset($this->passwordResetToken)) {
 
-            if(Carbon::createFromTimeString($this->passwordResetToken->created_at)->diffInMinutes(now()) >= config('app.reset_password_token_lifetime', 60)) {
+            if (Carbon::createFromTimeString($this->passwordResetToken->created_at)->diffInMinutes(now()) >= config('app.reset_password_token_lifetime', 60)) {
 
                 $passes = false;
             }
@@ -37,6 +35,8 @@ class ValidResetPasswordTokenRule implements ValidationRule
             $passes = false;
         }
 
-        if(!$passes) $fail(config('messages.auth.invalid_or_expired_token'));
+        if (! $passes) {
+            $fail(config('messages.auth.invalid_or_expired_token'));
+        }
     }
 }
